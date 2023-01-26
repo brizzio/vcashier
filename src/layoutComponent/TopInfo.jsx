@@ -1,14 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { WebcamCapture } from '../utils/Webcam'
-import { CashRegister } from '@styled-icons/fa-solid'
-import { StoreMallDirectory } from '@styled-icons/material-outlined'
-import { ArrowLeftRight } from '@styled-icons/bootstrap'
-import { UserStar } from '@styled-icons/remix-line'
+//import { CashRegister } from '@styled-icons/fa-solid'
+//import { StoreMallDirectory } from '@styled-icons/material-outlined'
+//import { ArrowLeftRight } from '@styled-icons/bootstrap'
+//import { UserStar } from '@styled-icons/remix-line'
 
-import { User } from '@styled-icons/feather'
-import { FoodMenu } from '@styled-icons/boxicons-regular'
-import { CalendarDay } from '@styled-icons/fluentui-system-filled'
+//import { User } from '@styled-icons/feather'
+//import { FoodMenu } from '@styled-icons/boxicons-regular'
+//import { CalendarDay } from '@styled-icons/fluentui-system-filled'
 
 
 const Switch = (props)=>{
@@ -39,26 +39,26 @@ function TopInfo(props) {
             </div>  
             <div className="flex flex-col 
                             h-full w-1/4
-                            items-center justify-center gap-0">
-                <StoreMallDirectory className='w-9'/>
+                            items-center justify-center gap-2 mt-2">
+                <i className="fa-solid fa-store fa-xl"></i>
                 <p className="font-bold text-3xl text-slate-600 mt-0 ">001</p>
             </div>
             <div className="flex flex-col
                         h-full w-1/4 
-                        items-center justify-center"> 
-                <CashRegister className='w-8'/>
+                        items-center justify-center gap-2 mt-2"> 
+                <i className="fa-solid fa-cash-register fa-xl"></i>
                 <p className="font-bold text-3xl text-slate-600">465</p>
             </div>
             <div className="flex flex-col 
                         h-full w-1/4 
-                        items-center justify-center"> 
-                <UserStar className="w-8"/>
+                        items-center justify-center gap-2 mt-2"> 
+                <i className="fa-solid fa-building-user fa-xl"></i>
                 <p className="font-bold text-3xl text-slate-600">15246</p>
             </div>
             <div className="flex flex-col 
                  h-full w-1/4 
-                 items-center justify-center gap-1 "> 
-                  <ArrowLeftRight className='w-8 mr-4'/>
+                 items-center justify-center gap-4 mt-2 "> 
+                 <i className="fa-solid fa-right-left fa-xl mr-4"></i>
                   <Switch 
                     checked={props.checked}
                     onChange={()=>{ handleSwitchChange()}}
@@ -70,20 +70,20 @@ function TopInfo(props) {
 
             <div className={`flex flex-row
                 h-full w-1/6
-                items-center justify-center border-zinc-500 border-b-4 pb-3 mr-3 gap-2`}>
-                <CalendarDay className='h-6 mt-auto'/>
-                <p className={`font-bold text-lg mt-auto` }>116</p>
+                items-center justify-center border-zinc-500 border-b-4 gap-2`}>
+                <i className="fa-solid fa-calendar-days fa-xl"></i>
+                <p className={`font-bold text-3xl` }>116</p>
             </div>
             <div className={`flex flex-row
                 h-full w-1/6 
-                items-center justify-center border--zinc-500 border-b-4 pb-3 mr-3 gap-2`}>
-                <FoodMenu className='h-6 mt-auto'/>
-                <p className={`font-bold text-lg mt-auto` }>1457</p>
+                items-center justify-center border-zinc-500 border-b-4 gap-2`}>
+                <i className="fa-solid fa-cubes-stacked fa-xl"></i>
+                <p className={`font-bold text-3xl` }>1457</p>
             </div>
             <div className={`flex flex-row h-full w-1/6
-                items-center justify-center border--zinc-500 border-b-4 pb-3 mr-3 gap-2 mb-0`}>
-                <User className='h-9 mt-auto'/>
-                <div>CLIENTE</div>
+                items-center justify-center border-zinc-500 border-b-4 gap-2`}>
+                <i className="fa-regular fa-address-card fa-xl"></i>
+                <p className={`text-lg` }>CLIENTE</p>
             </div>
 
 
