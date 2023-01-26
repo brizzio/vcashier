@@ -8,9 +8,9 @@ function App() {
  
 
   return (
-   <div className="flex justify-center items-center w-screen h-screen bg-red-300">
+   <div className="flex justify-center items-center w-screen h-screen bg-zinc-200">
 
-    <div className="w-5/6 h-5/6 bg-white">
+    <div className="w-[84rem] h-[38rem] bg-white box-border border-2 border-zinc-300">
     <Router>
       <Routes>
         <Route index element={<Cashier/>} />

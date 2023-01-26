@@ -3,11 +3,6 @@ import React , { useContext, useEffect } from 'react'
 export default function Login() {
 
  
-  
-
-  
-  
-
   const handleLogin = (type) => {
     //Prevent page reload
     
