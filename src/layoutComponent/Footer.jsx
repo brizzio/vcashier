@@ -12,7 +12,7 @@ function Footer() {
 
         <ReactSVG
         afterInjection={(svg) => {
-            console.log(svg)
+            'console.log(svg)'
         }}
         beforeInjection={(svg) => {
             svg.classList.add('svg-class-name')
