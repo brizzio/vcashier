@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { WebcamCapture } from '../utils/Webcam'
+import Webc from '../utils/Webc'
 //import { CashRegister } from '@styled-icons/fa-solid'
 //import { StoreMallDirectory } from '@styled-icons/material-outlined'
 //import { ArrowLeftRight } from '@styled-icons/bootstrap'
@@ -35,7 +35,7 @@ function TopInfo(props) {
          
          <div id="topRight" className={`flex flex-row items-center h-full w-full text-zinc-900`}>
             <div className="flex flex-col w-1/6 items-center justify-center">
-              <WebcamCapture id="webimage" />
+              <Webc id="webimage" />
             </div>  
             <div className="flex flex-col 
                             h-full w-1/4
