@@ -5,7 +5,7 @@ import { ReactSVG } from 'react-svg'
 
 function Footer() {
   return (
-    <article className='flex items-center justify-between box-border w-full h-8 border-2 border-zinc-500 px-4'>
+    <article className='flex items-center justify-between box-border w-full h-8 border-t-2 border-zinc-200 px-4'>
          
         <TimeStyled textColor="black"/>
     
