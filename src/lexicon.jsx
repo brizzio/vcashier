@@ -6,17 +6,6 @@ export const languages = [
 
    
 {
-    lid:'pt',
-    country_code:'br',
-    country_name:'Brazil',
-    language_name:'Portuguese',
-    language_code:'pt-BR',
-    language_code3:'pt-BRA',
-    language_lcid:'1046',
-    flag:flags['br']
-},
-
-{
     lid:'it',
     country_code:'it',
     country_name:'Italy',
@@ -36,6 +25,17 @@ export const languages = [
     language_code3:'en-GBR',
     language_lcid:'2057',
     flag:flags['gb']
+},
+
+{
+    lid:'pt',
+    country_code:'br',
+    country_name:'Brazil',
+    language_name:'Portuguese',
+    language_code:'pt-BR',
+    language_code3:'pt-BRA',
+    language_lcid:'1046',
+    flag:flags['br']
 },
 
 ]

@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import Button from '../customUi/Button'
 import { useNavigate } from 'react-router-dom';
+import useAuth from '../context/hooks/useAuth';
 
 import NumericKb from './NumericKb';
 
 import { ui, languages } from '../lexicon'
 
 function DisplayProduct() {
+
+    const { handleLogout } = useAuth()
 
     const navigate = useNavigate()
 
@@ -109,7 +112,7 @@ function DisplayProduct() {
                
                 <Button variant="primary" size="small" className="h-full min-w-full" onClick={() => setShowModal(true)}>{btnTitles.suspendCashier[lid].toUpperCase()}</Button>
                 
-                <Button variant="primary" size="small" className="h-full min-w-full" onClick={() => setShowModal(true)}>{btnTitles.closeCashier[lid].toUpperCase()}</Button>
+                <Button variant="primary" size="small" className="h-full min-w-full" onClick={() => handleLogout()}>{btnTitles.closeCashier[lid].toUpperCase()}</Button>
                     
                 
             </div>
