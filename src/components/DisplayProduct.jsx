@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from 'react'
+import Button from '../customUi/Button'
+import { useNavigate } from 'react-router-dom';
+
+import NumericKb from './NumericKb';
+
+import { ui, languages } from '../lexicon'
 
 function DisplayProduct() {
 
+    const navigate = useNavigate()
 
+    const [lid, setLid] = useState("it") 
     const [quantity, setQuantity] = useState(1)
     const [upc, setUpc] = useState('7908546855')
     const [read, setRead] = useState({})
+
+    const btnTitles = ui.btn
 
     const product = {
         quantity:quantity,
@@ -23,7 +33,7 @@ function DisplayProduct() {
 
   return (
     
-    <div className="flex flex-col h-full min-w-full mt-3">
+    <div className="flex flex-col h-full w-3/6 mt-3">
 
     <div id="display" className="flex flex-row h-17 min-w-[21rem] mt-0 bg-[#F2F7F5] py-4 ml-5 border-2 border-blue-200 rounded-2xl shadow-xl">
             
@@ -70,6 +80,44 @@ function DisplayProduct() {
             <button onClick={() => 'clickOpenSerial()'}> Open Serial Port </button>
         </span>
     </div>
+
+    {/* ************* COMMANDS ******************************************************** */}
+
+    <div className="flex flex-col h-[18rem] min-w-full ml-3 pr-1 px-2 ">
+            
+            <div className="grid grid-flow-col-dense grid-cols-4 grid-rows-5 gap-2 w-full h-full py-2 pr-2">
+                
+               
+                 <Button variant="primary" size="small" className="h-full mb-1 min-w-full mt-auto" onClick={()=> navigate("/loyalty")}>{btnTitles.loyalty[lid].toUpperCase()}</Button> 
+                
+                <Button variant="main" size="small" className=" min-h-full min-w-full" onClick={()=> navigate("/loyalty")}>{btnTitles.lottery[lid].toUpperCase()}</Button> 
+                
+
+                <Button variant="primary" size="small" className="row-span-3 min-h-full min-w-full" onClick={() => setShowModal(true)}>{btnTitles.newCart[lid].toUpperCase()}</Button>
+                
+                           
+                <div className=" rounded col-span-2 row-span-4 mb-2">
+                    <NumericKb onChange={handleQuantityChange}/> 
+                </div>
+                
+                <Button variant="primary" size="small" className="col-span-3 min-h-full h-auto" onClick={() => setShowModal(true)}>{btnTitles.cancelCart[lid].toUpperCase()}</Button>
+
+                <Button variant="primary" size="small" className="h-full mb-1 min-w-full mt-auto" onClick={() => setShowModal(true)}>{btnTitles.productPicker[lid].toUpperCase()}</Button>
+                
+                <Button variant="primary" size="small" className="h-full mb-1 min-w-full mt-auto" onClick={() => setShowModal(true)}>{btnTitles.lastCart[lid].toUpperCase()}</Button>
+
+               
+                <Button variant="primary" size="small" className="h-full mb-1 min-w-full mt-auto" onClick={() => setShowModal(true)}>{btnTitles.suspendCashier[lid].toUpperCase()}</Button>
+                
+                <Button variant="primary" size="small" className="h-full mb-1 min-w-full mt-auto" onClick={() => setShowModal(true)}>{btnTitles.closeCashier[lid].toUpperCase()}</Button>
+                    
+                
+            </div>
+        
+        </div>
+
+
+
 
     </div>
   )
