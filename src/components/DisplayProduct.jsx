@@ -23,9 +23,7 @@ function DisplayProduct() {
 
   return (
     
-    <div className="flex flex-col min-h-full min-w-full mt-3">
-
-       
+    <div className="flex flex-col h-full min-w-full mt-3">
 
     <div id="display" className="flex flex-row h-17 min-w-[21rem] mt-0 bg-[#F2F7F5] py-4 ml-5 border-2 border-blue-200 rounded-2xl shadow-xl">
             
