@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import AppLayout from '../layout/AppLayout'
 import Content from '../layoutComponent/Content'
 import DisplayProduct from '../components/DisplayProduct'
+import DisplayList from '../components/DisplayList'
 
 
 function Cashier() {
@@ -10,7 +11,7 @@ function Cashier() {
     <AppLayout>
       <Content>
         <DisplayProduct/>
-        <Link to="/login">go to Login Page</Link>
+        <DisplayList/>
       </Content>
     </AppLayout>
    

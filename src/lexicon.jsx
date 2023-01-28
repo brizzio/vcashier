@@ -1,5 +1,7 @@
 import { flags } from "./utils/flags-24x24"
 
+var lang = navigator.language || navigator.userLanguage;
+
 export const languages = [
 
    
@@ -125,6 +127,11 @@ export const ui = {
                 en:"close cashier",
                 it:"chiudi il cassa", 
                 pt:"fechamento do caixa",
+            },
+            checkout:{
+                en:"checkout",
+                it:"chudi conto", 
+                pt:"pagar",
             },
         }
 }
