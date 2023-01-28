@@ -5,15 +5,15 @@ const classes = {
     disabled: 'opacity-50 cursor-not-allowed',
     pill: 'rounded-full',
     size: {
-        small: 'px-2 py-1 text-sm',
+        small: 'px-2 py-2 text-xs',
         normal: 'px-4 py-2',
         large: 'px-8 py-3 text-lg'
     },
     variant: {
-        primary: 'bg-transparent hover:bg-[#051619] text-[#051619] font-semibold hover:text-white py-2 px-4 border border-[#051619] hover:border-transparent rounded',
+        primary: 'bg-transparent hover:bg-[#051619] text-[#051619] hover:text-white border border-[#051619] hover:border-transparent rounded',
         secondary: 'bg-gray-200 hover:bg-gray-800 focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 text-gray-900 hover:text-white',
         danger: 'bg-red-500 hover:bg-red-800 focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 text-white',
-        main:'bg-transparent hover:bg-[#051619] text-[#051619] font-semibold hover:text-white py-2 px-4 border border-[#051619] hover:border-transparent rounded'
+        main:'bg-transparent hover:bg-[#051619] text-[#051619]  hover:text-white py-2 px-4 border border-[#051619] hover:border-transparent rounded'
     }
 }
 
