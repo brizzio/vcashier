@@ -99,10 +99,10 @@ const btnTitles = ui.btn
 
 const listItems = items.map((item, index) =>{
 
-let priceSpan = `(X${item.quantity}) € ${item.price}`
-console.log('index', index.toString())
+let priceSpan = `x${item.quantity} € ${item.price}`
+//console.log('index', index.toString())
 return (
-<div className='flex flex-row px-3 py-0.5 items-center justify-between text-xs text-gray-900 border-b border-gray-400'>
+<div key={'index'+ index} className='flex flex-row px-3 py-0.5 items-center justify-between text-xs text-gray-900 border-b border-gray-400'>
     <div className='flex flex-row items-center'>
         <span className="px-2">{item.name}</span>  
         <span className="px-2">{item.upc}</span>         
@@ -199,7 +199,7 @@ const DisplayList = () => {
 
 
                 <div className={`flex flex-row items-center justify-center border rounded-full border-gray-700 w-1/4 gap-2 px-2 py-1 `}>
-                    <i class="fa-solid fa-euro-sign"></i>
+                    <i className="fa-solid fa-euro-sign"></i>
                     <span className={`text-2xl font-thin`}>1.250,00</span>
                 </div> 
             </div>
