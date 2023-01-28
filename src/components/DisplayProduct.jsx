@@ -88,7 +88,7 @@ function DisplayProduct() {
             <div className="grid grid-flow-col-dense grid-cols-4 grid-rows-5 gap-2 w-full h-full py-2 pr-2">
                 
                
-                 <Button variant="primary" size="small" className="h-full mb-1 min-w-full mt-auto" onClick={()=> navigate("/loyalty")}>{btnTitles.loyalty[lid].toUpperCase()}</Button> 
+                 <Button variant="primary" size="small" className="h-full min-w-full" onClick={()=> navigate("/loyalty")}>{btnTitles.loyalty[lid].toUpperCase()}</Button> 
                 
                 <Button variant="main" size="small" className=" min-h-full min-w-full" onClick={()=> navigate("/loyalty")}>{btnTitles.lottery[lid].toUpperCase()}</Button> 
                 
@@ -100,16 +100,16 @@ function DisplayProduct() {
                     <NumericKb onChange={handleQuantityChange}/> 
                 </div>
                 
-                <Button variant="primary" size="small" className="col-span-3 min-h-full h-auto" onClick={() => setShowModal(true)}>{btnTitles.cancelCart[lid].toUpperCase()}</Button>
+                <Button variant="primary" size="small" className="col-span-3 h-full" onClick={() => setShowModal(true)}>{btnTitles.cancelCart[lid].toUpperCase()}</Button>
 
-                <Button variant="primary" size="small" className="h-full mb-1 min-w-full mt-auto" onClick={() => setShowModal(true)}>{btnTitles.productPicker[lid].toUpperCase()}</Button>
+                <Button variant="primary" size="small" className="h-full w-full" onClick={() => setShowModal(true)}>{btnTitles.productPicker[lid].toUpperCase()}</Button>
                 
-                <Button variant="primary" size="small" className="h-full mb-1 min-w-full mt-auto" onClick={() => setShowModal(true)}>{btnTitles.lastCart[lid].toUpperCase()}</Button>
+                <Button variant="primary" size="small" className="h-full min-w-full" onClick={() => setShowModal(true)}>{btnTitles.lastCart[lid].toUpperCase()}</Button>
 
                
-                <Button variant="primary" size="small" className="h-full mb-1 min-w-full mt-auto" onClick={() => setShowModal(true)}>{btnTitles.suspendCashier[lid].toUpperCase()}</Button>
+                <Button variant="primary" size="small" className="h-full min-w-full" onClick={() => setShowModal(true)}>{btnTitles.suspendCashier[lid].toUpperCase()}</Button>
                 
-                <Button variant="primary" size="small" className="h-full mb-1 min-w-full mt-auto" onClick={() => setShowModal(true)}>{btnTitles.closeCashier[lid].toUpperCase()}</Button>
+                <Button variant="primary" size="small" className="h-full min-w-full" onClick={() => setShowModal(true)}>{btnTitles.closeCashier[lid].toUpperCase()}</Button>
                     
                 
             </div>
