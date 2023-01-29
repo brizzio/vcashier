@@ -36,14 +36,14 @@ function DisplayProduct() {
 
   return (
     
-    <div className="flex flex-col h-full w-3/6 mt-3">
+    <div className="flex flex-col h-full w-3/6 mt-3 mr-2">
 
-    <div id="display" className="flex flex-row h-17 min-w-[21rem] mt-0 bg-[#F2F7F5] py-4 ml-5 border-2 border-blue-200 rounded-2xl shadow-xl">
+    <div id="display" className="flex flex-row h-17 w-[40rem] mt-0 bg-[#F2F7F5] py-5 ml-2 pr-6 border-2 border-blue-200 rounded-2xl shadow-xl">
             
         {/* <div className="flex items-center justify-center ml-2">
             <i class="fa fa-cart-plus fa-lg" aria-hidden="true"></i> 
         </div> */}
-        <div className="flex items-center justify-center text-slate-400 text-3xl px-2 ml-2 border-box border-r-2 border-zinc-200">
+        <div className="flex items-center justify-center text-slate-400 text-3xl px-2 border-box border-r-2 border-zinc-200">
             {quantity}
         </div>
         <div className="w-full flex flex-col justify-center pl-3">
@@ -75,7 +75,7 @@ function DisplayProduct() {
         
     </div>
 
-    <div className="flex flex-row min-w-full my-1 pt-2 ml-6 pr-4 items-center justify-between">
+    <div className="flex flex-row min-w-full mx-2 pt-2 pr-4 items-center justify-between">
         <span className="bg-slate-400 shadow-md text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Data Prezzi: 22/12/2022</span>
         <span className="bg-slate-400 shadow-md text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded ">Prodotti: 3.570</span>
         <span className="bg-slate-400 shadow-md text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded ">Negozio: Supermercati Marel</span>
@@ -86,7 +86,7 @@ function DisplayProduct() {
 
     {/* ************* COMMANDS ******************************************************** */}
 
-    <div className="flex flex-col h-[18rem] min-w-full ml-3 pr-1 px-2 ">
+    <div className="flex flex-col h-[18rem] min-w-full pr-1 px-2 ">
             
             <div className="grid grid-flow-col-dense grid-cols-4 grid-rows-5 gap-2 w-full h-full py-2 pr-2">
                 

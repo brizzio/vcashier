@@ -3,6 +3,7 @@ import Login from "./pages/Login"
 import Cashier from "./pages/Cashier"
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import AuthProvider from "./context/AuthProvider";
+import InfoProvider from "./context/InfoProvider";
 import useAuth from "./context/hooks/useAuth";
 
 
@@ -37,13 +38,14 @@ function App() {
     <div className="w-[84rem] h-[38rem] bg-white box-border border-2 border-zinc-300">
     <Router>
       <AuthProvider>
-        <Routes>
-          <Route element={<ProtectedRoute/>}>
-            <Route index element={<Cashier/>} />
-          </Route>
-          <Route path="/login" element={<Login/>} />
-          
-        </Routes> 
+        <InfoProvider>
+          <Routes>
+            <Route element={<ProtectedRoute/>}>
+              <Route index element={<Cashier/>} />
+            </Route>
+            <Route path="/login" element={<Login/>} />
+          </Routes> 
+        </InfoProvider>
       </AuthProvider>
     </Router>
         

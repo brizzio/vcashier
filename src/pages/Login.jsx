@@ -23,7 +23,7 @@ export default function Login() {
             <h1>CASSA MAREL</h1>
             <button variant="main" size="small" className="min-w-9 h-12" onClick={() => handleAuth('admin')}>Accessa come Amministratore</button>
 
-            <button variant="main" size="small" className="min-w-9 h-12 " onClick={() => handleAuth('cassa')}>Accessa come Operatore Cassa</button>
+            <button variant="main" size="small" className="min-w-9 h-12 " onClick={() => handleAuth('cashier')}>Accessa come Operatore Cassa</button>
           </div>
           </article>
       

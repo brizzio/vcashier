@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Webc from '../utils/Webc'
+import useInfo from '../context/hooks/useInfo'
 //import { CashRegister } from '@styled-icons/fa-solid'
 //import { StoreMallDirectory } from '@styled-icons/material-outlined'
 //import { ArrowLeftRight } from '@styled-icons/bootstrap'
@@ -9,7 +10,6 @@ import Webc from '../utils/Webc'
 //import { User } from '@styled-icons/feather'
 //import { FoodMenu } from '@styled-icons/boxicons-regular'
 //import { CalendarDay } from '@styled-icons/fluentui-system-filled'
-
 
 const Switch = (props)=>{
 
@@ -25,11 +25,18 @@ const Switch = (props)=>{
 }
 
 
-const handleSwitchChange = () => {
-  console.log('Switch Change')
-}
 
 function TopInfo(props) {
+
+ 
+
+  const handleSwitchChange = () => {
+    console.log('Switch Change')
+    props.toggle()
+    
+  }
+  
+
   return (
     <article className='flex items-center justify-between box-border w-full h-20'>
          
@@ -60,7 +67,7 @@ function TopInfo(props) {
                  items-center justify-center gap-4 mt-2 "> 
                  <i className="fa-solid fa-right-left fa-lg mr-4"></i>
                   <Switch 
-                    checked={props.checked}
+                    checked={props.swap}
                     onChange={()=>{ handleSwitchChange()}}
                   />
             </div>
