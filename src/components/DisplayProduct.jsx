@@ -3,7 +3,7 @@ import Button from '../customUi/Button'
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../context/hooks/useAuth';
 import BouncingDotsLoader from '../utils/BouncingDotsLoader/BouncingDotsLoader';
-import { generatePriceFromUpc } from '../utils/functions';
+import { generatePriceFromUpc } from '../utils/Functions';
 import NumericKb from './NumericKb';
 
 import { ui, languages } from '../lexicon'
