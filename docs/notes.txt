@@ -1,0 +1,665 @@
+<div class="table-wrp block max-h-96 mt-0">
+<table class="w-full">
+  <thead class="bg-white border-b sticky top-0">
+    {/* <!-- table head content --> */}
+    <tr>
+          <th scope="col" class="py-3 px-6">
+              PRODOTTO
+          </th>
+          <th scope="col" class="py-3 px-6">
+              UPC
+          </th>
+          <th scope="col" class="py-3 px-6">
+              TIPO
+          </th>
+          <th scope="col" class="py-3 px-6">
+              PREZZO
+          </th>
+          <th scope="col" class="py-3 px-6">
+              D
+          </th>
+      </tr>
+  </thead>
+  <tbody class="h-6 overflow-y-auto">
+    {/* <!-- table body content --> */}
+    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+          <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            Ice Tea: Limone 1,5 l - Lipton
+          </th>
+          <td class="py-4 px-6">
+            7908546855
+          </td>
+          <td class="py-4 px-6">
+              R
+          </td>
+          <td class="flex flex-row py-4 px-6 items-center">
+              <EuroSign className='h-4 mr-2'/>12,33
+          </td>
+          <td class="py-4 px-6">
+              <DelButton />
+          </td>
+      </tr>
+      
+  </tbody>
+</table>
+</div>
+
+
+======================================================================
+
+
+Here's another way that I tried yesterday
+
+In your child script, define the method available to the parent and a regular component
+
+
+    var ChildStateModificationFunc;
+    const Child = ()=>{
+    const [someState, setSomeState] = useState();
+
+    //define the state that you want to modify
+    ChildStateModificationFunc = (modVal)=>{
+        setSomeState(modVal)
+    }
+
+    return (
+    <div>
+        {/* your child jsx here */}
+    </div>
+    }
+
+    //export both the child and the method
+    export default Child;
+    export {ChildStateModificationFunc}
+
+
+In your parent script, import both items
+
+    import Child, {ChildStatteModificationFunc} from 'Child.js'
+
+    const Parent = ()=>{
+
+    var newVal = 'some parent val'  //let say you just fetch this from some web api
+    //share the newVal with Child component
+    ChildStatteModificationFunc(newVal)
+
+    return(
+    <div>
+        <Child />
+    </div>)
+
+
+    ===========================================
+
+    serial socket
+
+    var express = require('express'),
+    app = express(),
+    server = require('http').Server(app),
+    io = require('socket.io')(server),
+    port = 8888;
+
+//Server start
+server.listen(port, () => console.log('on port' + port))
+
+//user server
+app.use(express.static(__dirname + '/public'));
+
+io.on('connection', onConnection);
+
+var connectedSocket = null;
+function onConnection(socket){
+    connectedSocket = socket;
+}
+
+
+const SerialPort = require('serialport');
+const Readline = SerialPort.parsers.Readline; 
+const usbport = new SerialPort('COM4');  
+const parser = usbport.pipe(new Readline()); 
+parser.on('data', function (data) {
+    io.emit('serialdata', { data: data });
+});
+Client side (React):
+
+import React from "react";
+import io from 'socket.io-client';
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.socket = null;
+  }
+
+  componentDidMount() {
+    this.socket = io('http://localhost:8888');
+    //this.socket.open();
+    this.socket.on('serialdata', (data) => {
+      // we get settings data and can do something with it
+      this.setState({
+        settings: data,
+      })
+    });
+  }
+
+  componentWillUnmount() {
+    this.socket.close();
+  }
+
+  render() {
+    ...
+  }
+}
+
+
+===============================================================
+
+How to communicate with Web Serial Port using Serial API and Reactjs.
+Pachiyappan Velu
+Pachiyappan Velu
+November 30, 20217 min read
+img
+img
+Serial Port
+
+A serial port is a bidirectional communication interface that allows sending and receiving data byte by byte.
+
+Web Serial API bridges the web and the physical world by allowing websites to communicate with serial devices, such as microcontrollers, 3D printers, removable USB, and Bluetooth devices that emulate a serial port.
+
+Using the Web Serial Port APIs
+In this article, you will learn:
+Open the serial port connection with desired baud rate.
+Read the data from the serial port.
+Write the data to the serial port.
+Then finally, close the connected serial port connection.
+You will need the below prerequisites,
+Basic knowledge of HTML, CSS, JavaScript, and ReactJS.
+A recent version of Chrome (v80 or latest).
+A communication device (microcontroller/removable USB/ Bluetooth device).
+Feature Support Detection:
+First, we need the check if the web serial port is supported, use:
+
+if ("serial" in navigator) {
+  console.log("Awesome, The serial port is supported.")
+  // The Web Serial API is supported.
+}
+If the above block is working, then we can continue with the read from and write data on a serial port.
+
+Open a Serial Port:
+To open a serial port, first, we need to access the SerialPort object. This will prompt the user to select a single serial port by calling navigator.serial.requestPosrt() in the response to a user can gesture such as touch or, mouse click, or pick one from the navigator.serial.getPorts() which returns a list of serial ports the website has been granted to access.
+
+From the below options user can select one of the ports,
+
+Browser request to access the serial port
+
+document.querySelector('openSerialPort').addEventListener('click', async () => {
+  //The Prompt will open to user to select's any serial port.
+  const port = await navigator.serial.requestPort(); 
+});
+To get the list of serial ports, use:
+
+// Get all serial ports the user has previously granted the website access to.
+const ports = await navigator.serial.getPorts();
+Calling requestPort() prompts the user to select a device from the list and it returns a SerialPort object. Once we have a SerialPort object, then calling port.open() with desired baud rate, it will open the port. The baud rate specifies how fast the data is sent over the serial line. It is expressed in units of bits-per-seconds(bps).
+
+// Prompt user to select any serial port.
+const port = await navigator.serial.requestPort();
+
+// Wait for the serial port to open.
+await port.open({ baudRate: 9600 });
+You can also specify any of the options below when opening a serial port. The options are optional,
+
+dataBits: The number of data bits per frame (either 7 or 8).
+stopBits: The number of stop bits at the end of a frame (either 1 or 2).
+bufferSize: The parity mode (either "none", "even", or "odd").
+parity: The size of the read and write buffer that should be created (must be less than 16MB).
+flowControl: The flow control mode (either "none" or "hardware").
+Read from a serial port:
+All the Inputs and Outputs Streams in the web Serial port are handled by the Streams API.
+
+After the serial port connection is established, the readable and writable properties from the SerialPort object return a ReadableStream and a WritableStream. Those will be used to receive data from and send data to the serial device. Both use Unit8Array instances for data transfer.
+
+When new data arrives from the serial device, port.readable.getReader().read() returns two properties asynchronously: the value and a done boolean. If done is true, the serial port has been closed or no more data is coming in. Calling port.readable.getReader() creates a reader and locks readable to it. While readable is locked, the serial port can't be closed.
+
+// Listen to data coming from the serial device.
+const reader = port.readable.getReader();
+while (true) {
+  const { value, done } = await reader.read();
+  if (done) {
+    // Allow the serial port to be closed later.
+    reader.releaseLock();
+    break;
+  }
+  // value is a Uint8Array.
+  console.log(value);
+}
+Some non-fatal serial port read errors can happen under some conditions such as buffer overflow, framing errors, or parity errors. Those are thrown as exceptions and can be caught by adding another loop on top of the previous one that checks port.readable().
+
+while (port.readable) {
+  const reader = port.readable.getReader();
+
+  try {
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) {
+        // Allow the serial port to be closed later.
+        reader.releaseLock();
+        break;
+      }
+      if (value) {
+        console.log(value);
+      }
+    }
+  } catch (error) {
+    // TODO: Handle non-fatal read error.
+  }
+}
+Which will catch the errors.
+
+If the serial device sends a text back, you can pipe port.readable through a TextDecoderStream as shown below. A TextDecoderStream is a Transform Stream that grabs all Unit8Array chunks and converts them to strings.
+
+// Listen to data coming from the serial device.
+const textDecoder = new TextDecoderStream();
+const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
+const reader = textDecoder.readable.getReader();
+while (true) {
+  const { value, done } = await reader.read();
+  if (done) {
+    // Allow the serial port to be closed later.
+    reader.releaseLock();
+    break;
+  }
+  // value is a string will be streaming here.
+  console.log(value);
+}
+Write data to a Serial port:
+To send data to a serial device, pass data to port.writable.getWriter().write(). Calling releaseLock() on port.writable.getWriter() is required for the serial port to be closed later.
+
+{
+    const writer = port.writable.getWriter();
+    const data = new Uint8Array([104, 101, 108, 108, 111]); // hello
+    await writer.write(data);
+    // Allow the serial port to be closed later.
+    writer.releaseLock();
+}
+Send text to the device through a TextEncoderStream piped to port.writable as shown below.
+
+{
+    const textEncoder = new TextEncoderStream();
+    const writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
+    const writer = textEncoder.writable.getWriter();
+    await writer.write("hello");
+}
+Close a serial port:
+The port.close() closes the serial port if its readable and writable members are unlocked, meaning releaseLock() has been called for their respective reader and writer.
+
+await port.close();
+
+Closing a serial port is more complicated when using Transform Streams (like TextDecoderStream and TextEncoderStream).
+
+Call reader.calcel() as before. Then call writer.close() and port.close(). This propagates errors through the transform streams to the underlying serial port. Because error propagation doesn't happen immediately, you need to use the readableStreamClosed and writableStreamClosed promises created earlier to detect when port.readable and port.writable have been unlocked.
+
+Cancelling the reader causes the stream to be aborted; this is why you must catch and ignore the resulting error.
+
+{
+    // With transform streams.
+
+    const textDecoder = new TextDecoderStream();
+    const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
+    const reader = textDecoder.readable.getReader();
+
+    // Listen to data coming from the serial device.
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) {
+        reader.releaseLock();
+        break;
+      }
+      // value is a string.
+      console.log(value);
+    }
+
+    const textEncoder = new TextEncoderStream();
+    const writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
+
+    reader.cancel();
+    await readableStreamClosed.catch(() => { /* Ignore the error */ });
+
+    writer.close();
+    await writableStreamClosed;
+
+    await port.close();
+}
+Using React to handle connections:
+User can select an serial option from the prompts, when the action has triggered. Lets see the below snippet.
+
+import react from "react";
+
+const readWriteSerialData = () =>{
+  const openSerialPort = async () =>{
+    port = await navigator.serial.requestPort();
+      await port.open({
+        baudRate: 6000
+      });
+  }
+  return(
+    <div>
+       <button onClick={() => openSerialPort()}> Open Serial Port </button>
+    </div>
+  );
+
+
+  =============================================================================
+
+
+  import {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
+// RESOURCES:
+// https://web.dev/serial/
+// https://reillyeon.github.io/serial/#onconnect-attribute-0
+// https://codelabs.developers.google.com/codelabs/web-serial
+
+export type PortState = "closed" | "closing" | "open" | "opening";
+
+export type SerialMessage = {
+  value: string;
+  timestamp: number;
+};
+
+type SerialMessageCallback = (message: SerialMessage) => void;
+
+export interface SerialContextValue {
+  canUseSerial: boolean;
+  hasTriedAutoconnect: boolean;
+  portState: PortState;
+  connect(): Promise<boolean>;
+  disconnect(): void;
+  subscribe(callback: SerialMessageCallback): () => void;
+}
+export const SerialContext = createContext<SerialContextValue>({
+  canUseSerial: false,
+  hasTriedAutoconnect: false,
+  connect: () => Promise.resolve(false),
+  disconnect: () => {},
+  portState: "closed",
+  subscribe: () => () => {},
+});
+
+export const useSerial = () => useContext(SerialContext);
+
+interface SerialProviderProps {}
+const SerialProvider = ({
+  children,
+}: PropsWithChildren<SerialProviderProps>) => {
+  const [canUseSerial] = useState(() => "serial" in navigator);
+
+  const [portState, setPortState] = useState<PortState>("closed");
+  const [hasTriedAutoconnect, setHasTriedAutoconnect] = useState(false);
+  const [hasManuallyDisconnected, setHasManuallyDisconnected] = useState(false);
+
+  const portRef = useRef<SerialPort | null>(null);
+  const readerRef = useRef<ReadableStreamDefaultReader | null>(null);
+  const readerClosedPromiseRef = useRef<Promise<void>>(Promise.resolve());
+
+  const currentSubscriberIdRef = useRef<number>(0);
+  const subscribersRef = useRef<Map<number, SerialMessageCallback>>(new Map());
+  /**
+   * Subscribes a callback function to the message event.
+   *
+   * @param callback the callback function to subscribe
+   * @returns an unsubscribe function
+   */
+  const subscribe = (callback: SerialMessageCallback) => {
+    const id = currentSubscriberIdRef.current;
+    subscribersRef.current.set(id, callback);
+    currentSubscriberIdRef.current++;
+
+    return () => {
+      subscribersRef.current.delete(id);
+    };
+  };
+
+  /**
+   * Reads from the given port until it's been closed.
+   *
+   * @param port the port to read from
+   */
+  const readUntilClosed = async (port: SerialPort) => {
+    if (port.readable) {
+      const textDecoder = new TextDecoderStream();
+      const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
+      readerRef.current = textDecoder.readable.getReader();
+
+      try {
+        while (true) {
+          const { value, done } = await readerRef.current.read();
+          if (done) {
+            break;
+          }
+          const timestamp = Date.now();
+          Array.from(subscribersRef.current).forEach(([name, callback]) => {
+            callback({ value, timestamp });
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        readerRef.current.releaseLock();
+      }
+
+      await readableStreamClosed.catch(() => {}); // Ignore the error
+    }
+  };
+
+  /**
+   * Attempts to open the given port.
+   */
+  const openPort = async (port: SerialPort) => {
+    try {
+      await port.open({ baudRate: 9600 });
+      portRef.current = port;
+      setPortState("open");
+      setHasManuallyDisconnected(false);
+    } catch (error) {
+      setPortState("closed");
+      console.error("Could not open port");
+    }
+  };
+
+  const manualConnectToPort = async () => {
+    if (canUseSerial && portState === "closed") {
+      setPortState("opening");
+      const filters = [
+        // Can identify the vendor and product IDs by plugging in the device and visiting: chrome://device-log/
+        // the IDs will be labeled `vid` and `pid`, respectively
+        {
+          usbVendorId: 0x1a86,
+          usbProductId: 0x7523,
+        },
+      ];
+      try {
+        const port = await navigator.serial.requestPort({ filters });
+        await openPort(port);
+        return true;
+      } catch (error) {
+        setPortState("closed");
+        console.error("User did not select port");
+      }
+    }
+    return false;
+  };
+
+  const autoConnectToPort = async () => {
+    if (canUseSerial && portState === "closed") {
+      setPortState("opening");
+      const availablePorts = await navigator.serial.getPorts();
+      if (availablePorts.length) {
+        const port = availablePorts[0];
+        await openPort(port);
+        return true;
+      } else {
+        setPortState("closed");
+      }
+      setHasTriedAutoconnect(true);
+    }
+    return false;
+  };
+
+  const manualDisconnectFromPort = async () => {
+    if (canUseSerial && portState === "open") {
+      const port = portRef.current;
+      if (port) {
+        setPortState("closing");
+
+        // Cancel any reading from port
+        readerRef.current?.cancel();
+        await readerClosedPromiseRef.current;
+        readerRef.current = null;
+
+        // Close and nullify the port
+        await port.close();
+        portRef.current = null;
+
+        // Update port state
+        setHasManuallyDisconnected(true);
+        setHasTriedAutoconnect(false);
+        setPortState("closed");
+      }
+    }
+  };
+
+  /**
+   * Event handler for when the port is disconnected unexpectedly.
+   */
+  const onPortDisconnect = async () => {
+    // Wait for the reader to finish it's current loop
+    await readerClosedPromiseRef.current;
+    // Update state
+    readerRef.current = null;
+    readerClosedPromiseRef.current = Promise.resolve();
+    portRef.current = null;
+    setHasTriedAutoconnect(false);
+    setPortState("closed");
+  };
+
+  // Handles attaching the reader and disconnect listener when the port is open
+  useEffect(() => {
+    const port = portRef.current;
+    if (portState === "open" && port) {
+      // When the port is open, read until closed
+      const aborted = { current: false };
+      readerRef.current?.cancel();
+      readerClosedPromiseRef.current.then(() => {
+        if (!aborted.current) {
+          readerRef.current = null;
+          readerClosedPromiseRef.current = readUntilClosed(port);
+        }
+      });
+
+      // Attach a listener for when the device is disconnected
+      navigator.serial.addEventListener("disconnect", onPortDisconnect);
+
+      return () => {
+        aborted.current = true;
+        navigator.serial.removeEventListener("disconnect", onPortDisconnect);
+      };
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [portState]);
+
+  // Tries to auto-connect to a port, if possible
+  useEffect(() => {
+    if (
+      canUseSerial &&
+      !hasManuallyDisconnected &&
+      !hasTriedAutoconnect &&
+      portState === "closed"
+    ) {
+      autoConnectToPort();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [canUseSerial, hasManuallyDisconnected, hasTriedAutoconnect, portState]);
+
+  return (
+    <SerialContext.Provider
+      value={{
+        canUseSerial,
+        hasTriedAutoconnect,
+        subscribe,
+        portState,
+        connect: manualConnectToPort,
+        disconnect: manualDisconnectFromPort,
+      }}
+    >
+      {children}
+    </SerialContext.Provider>
+  );
+};
+
+export default SerialProvider;
+
+
+========================== router component class
+
+In the react-router-dom v6, the support for history has been deprecated but instead of it, navigate has been introduced. If you want to redirect user to a specific page on success of a specific event, then follow the steps given below:
+
+Create a file named as withRouter.js, and paste the code given below in this file:
+
+import { useNavigate } from 'react-router-dom';
+
+export const withRouter = (Component) => {
+  const Wrapper = (props) => {
+    const navigate = useNavigate();
+    
+    return (
+      <Component
+        navigate={navigate}
+        {...props}
+        />
+    );
+  };
+  
+  return Wrapper;
+};
+Now, in whichever class based component you want to redirect the user to a specific path/component, import the above withRouter.js file there and use this.props.navigate('/your_path_here') function for the redirection.
+
+For your help, a sample code showing the same has been given below:
+
+import React from 'react';
+import {withRouter} from '.your_Path_To_Withrouter_Here/withRouter';
+
+class Your_Component_Name_Here extends React.Component{
+    constructor(){
+        super()
+        this.yourFunctionHere=this.yourFunctionHere.bind(this);
+    }
+
+    yourFunctionHere()
+    {
+        this.props.navigate('/your_path_here')
+    }
+
+    render()
+    {
+        return(
+            <div>
+              Your Component Code Here 
+            </div>
+        )
+    }
+}
+
+export default withRouter(Your_Component_Name_Here);
+Above Code works Perfect. And this is just a small extension. If you want onclick function here is the code:
+
+<div className = "row">
+    <button className= "btn btn-primary" 
+            onClick={this.yourFunctionHere}>RedirectTo</button>
+</div>

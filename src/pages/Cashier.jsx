@@ -21,16 +21,17 @@ function Cashier() {
   console.log('swap: ',swap)
   
   const toggleSwap = ()=>{
-      localStorage.setItem('swap', !swap)
+      localStorage.setItem('swap', JSON.stringify(!swap))
       setSwap(swapState=>!swapState)
   }
 
   function verifySwap(){
     setLoading(true)
-    const swap = localStorage.getItem('swap');
+    const localSwap = localStorage.getItem('swap');
+    const swap = localSwap?JSON.parse(localStorage.getItem('swap')):false;
     console.log(' verifySwap', !!swap)
     setLoading(false)
-    return swap
+    return !!swap
 
 }
 
