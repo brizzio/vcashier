@@ -3,7 +3,7 @@ import Button from '../customUi/Button'
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../context/hooks/useAuth';
 import BouncingDotsLoader from '../utils/BouncingDotsLoader/BouncingDotsLoader';
-
+import { generatePriceFromUpc } from '../utils/functions';
 import NumericKb from './NumericKb';
 
 import { ui, languages } from '../lexicon'
@@ -24,7 +24,7 @@ function DisplayProduct() {
     const [lid, setLid] = useState("it")
     const [item, setItem ] = useState({}) 
     const [quantity, setQuantity] = useState(1)
-    const [upc, setUpc] = useState('7908546855')
+    const [upc, setUpc] = useState('')
     const [read, setRead] = useState({})
 
     const [status, setStatus] = useState(statuses.automatic.toString())
@@ -33,14 +33,18 @@ function DisplayProduct() {
 
     const btnTitles = ui.btn
 
-    const product = {
-        quantity:quantity,
+    const getItemByUpc = (upc) =>{
+        
+        var APIcall = {
         upc:upc,
-        name:'Ice Tea: Limone 1,5 l',
-        brand:'Lipton',
-        manufacturer:'PEPSICO BEVERAGES ITALIA',
-        department:'Acqua, succhi e bibite',
-        price:'120,33'
+        name:'Prodotto ' + upc,
+        brand:'MANUAL',
+        manufacturer:'MANUAL ENTRY',
+        department:'Department, of, manual, entry',
+        price:generatePriceFromUpc(upc).toFixed(2)
+        }
+
+        return APIcall
     }  
 
   const handleQuantityChange = (q) =>{
@@ -51,6 +55,41 @@ function DisplayProduct() {
 
     setStatus(statuses.manual.toString())
   }
+
+  const handleUpcChange = (keyboardInput) => setUpc(keyboardInput)
+
+  const handleOnEnterUpcEvent = () => {
+    console.log('upc entered: ', upc)
+    var product = getItemByUpc(upc) 
+    var item={...product, quantity:quantity}
+    console.log('item>' , item)
+    //clear values
+    setUpc('')
+    setQuantity(1)
+    //load item found to list queue
+    setItem(item)
+    setStatus(statuses.automatic.toString())
+  }
+
+    function increment() {
+
+      //setCount(prevCount => prevCount+=1);
+      setQuantity(function (prevCount) {
+        console.log('preCount', prevCount)
+        return (Number(prevCount) + 1);
+      });
+    }
+
+    function decrement() {
+        setQuantity(function (prevCount) {
+            if (prevCount > 1) {
+            return (Number(prevCount) - 1); 
+            } else {
+            return (prevCount = 1);
+            }
+        });
+    }
+
 
 
   
@@ -64,8 +103,15 @@ function DisplayProduct() {
         
            {status===statuses.automatic && <AutomaticView title={statuses.automatic.toString()}
            component={<BouncingDotsLoader />}/>}
-           {status===statuses.manual && <ManualView title={statuses.manual.toString()}
-           component={<BouncingDotsLoader />}/>}
+           {status===statuses.manual && <ManualView 
+           title={statuses.manual.toString()}
+           component={<BouncingDotsLoader />}
+           set={handleQuantityChange}
+           add={increment}
+           subtract={decrement}
+           count={quantity}
+           code={upc}
+           />}
            
         
         
@@ -93,21 +139,26 @@ function DisplayProduct() {
                 <Button variant="primary" size="small" className=" min-h-full min-w-full" onClick={()=> navigate("/loyalty")}>{btnTitles.lottery[lid].toUpperCase()}</Button> 
                 
 
-                <Button variant="primary" size="normal" className="row-span-3 min-h-full min-w-full" onClick={() => setShowModal(true)}>{btnTitles.newCart[lid].toUpperCase()}</Button>
+                <Button variant="primary" size="normal" className="row-span-3 min-h-full min-w-full" onClick={() => console.log('btn ckick')}>{btnTitles.newCart[lid].toUpperCase()}</Button>
                 
                            
                 <div className=" rounded col-span-2 row-span-4 mb-2">
-                    <NumericKb onChange={handleQuantityChange}/> 
+                    <NumericKb 
+                        view={statuses[status]}
+                        onChange={handleQuantityChange}
+                        editUpc={handleUpcChange}
+                        upcDone ={handleOnEnterUpcEvent}
+                    /> 
                 </div>
                 
-                <Button variant="primary" size="small" className="col-span-3 h-full" onClick={() => setShowModal(true)}>{btnTitles.cancelCart[lid].toUpperCase()}</Button>
+                <Button variant="primary" size="small" className="col-span-3 h-full" onClick={() => console.log('btn ckick')}>{btnTitles.cancelCart[lid].toUpperCase()}</Button>
 
-                <Button variant="primary" size="small" className="h-full w-full" onClick={() => setShowModal(true)}>{btnTitles.productPicker[lid].toUpperCase()}</Button>
+                <Button variant="primary" size="small" className="h-full w-full" onClick={() => console.log('btn ckick')}>{btnTitles.productPicker[lid].toUpperCase()}</Button>
                 
-                <Button variant="primary" size="small" className="h-full min-w-full" onClick={() => setShowModal(true)}>{btnTitles.lastCart[lid].toUpperCase()}</Button>
+                <Button variant="primary" size="small" className="h-full min-w-full" onClick={() => console.log('btn ckick')}>{btnTitles.lastCart[lid].toUpperCase()}</Button>
 
                
-                <Button variant="primary" size="small" className="h-full min-w-full" onClick={() => setShowModal(true)}>{btnTitles.suspendCashier[lid].toUpperCase()}</Button>
+                <Button variant="primary" size="small" className="h-full min-w-full" onClick={() => console.log('btn ckick')}>{btnTitles.suspendCashier[lid].toUpperCase()}</Button>
                 
                 <Button variant="primary" size="small" className="h-full min-w-full" onClick={() => handleLogout()}>{btnTitles.closeCashier[lid].toUpperCase()}</Button>
                     
@@ -178,28 +229,18 @@ const Scanned = (props)=>{
         </>
     )};
 
-    const ManualView = ({title, component}) => {
+    const ManualView = ({
+        title, 
+        component,
+        set,        //={handleQuantityChange}
+        add,        //={increment}
+        subtract,   //={decrement}
+        count,      //={quantity}
+        code,       //={upc}
+    
+    }) => {
 
-        const [count, setCount] = useState(1);
-        const [code, setCode] = useState('');
-
-        function increment() {
-            //setCount(prevCount => prevCount+=1);
-            setCount(function (prevCount) {
-              return (prevCount += 1);
-            });
-          }
-      
-          function decrement() {
-            setCount(function (prevCount) {
-              if (prevCount > 1) {
-                return (prevCount -= 1); 
-              } else {
-                return (prevCount = 1);
-              }
-            });
-          }
-
+       console.log('ManualView code ', code)
 
     return(
         <>
@@ -218,35 +259,72 @@ const Scanned = (props)=>{
                    </div>
                 :
                 <>
+                    <div className="grid grid-flow-row-dense grid-cols-3 grid-rows-3  rounded bg-slate-100 w-2/6 h-full gap-1">
+                        
+                        <button 
+                            className="text-xs bg-white border rounded-lg"
+                            onClick={(e)=>{set(e.target.value)}}
+                            title={3}>3</button>
+                    
+                        <button 
+                            className="text-xs bg-white border rounded-lg"
+                            onClick={(e)=>{set(e.target.value)}}
+                            value={6}>6</button>
+                        <button 
+                            className="text-xs bg-white border rounded-lg"
+                            onClick={(e)=>{set(e.target.value)}}
+                            value={12}>12</button>
+                        <button 
+                            className="text-xs bg-white border rounded-lg"
+                            onClick={(e)=>{set(e.target.value)}}
+                            value={15}>15</button>
+                        <button 
+                            className="text-xs bg-white border rounded-lg"
+                            onClick={(e)=>{set(e.target.value)}}
+                            value={20}>20</button>
+                        <button 
+                            className="text-xs bg-white border rounded-lg"
+                            onClick={(e)=>{set(e.target.value)}}
+                            value={24}>24</button>
+                        <button 
+                            className="text-xs bg-white border rounded-lg"
+                            onClick={(e)=>{set(e.target.value)}}
+                            value={28}>28</button>
+                        <button 
+                            className="text-xs bg-white border rounded-lg"
+                            onClick={(e)=>{set(e.target.value)}}
+                            value={32}>32</button>
+                        <button 
+                            className="text-xs bg-white border rounded-lg"
+                            onClick={(e)=>{set(e.target.value)}}
+                            value={36}>36</button>
+                    
+                    </div>
                     <div className="flex flex-col items-center justify-center h-full ">
-                    <button onClick={increment}>
+                    <button onClick={add}>
                         <i className="fa fa-chevron-up text-2xl" aria-hidden="true"></i>
                     </button>
                     <span 
                         className='w-12 min-h-12 border-r-2 border-zinc-400 text-3xl text-center font-semibold' >
                         {count}
                     </span>
-                    <button onClick={decrement}>
+                    <button onClick={subtract}>
                         <i className="fa fa-chevron-down text-2xl" aria-hidden="true"></i>
                     </button>
                     </div>
-                    <div className="flex h-full w-4/6 items-center ml-4">
+                    <div className="flex h-full w-2/6 items-center ml-4">
                         <span className="text-3xl">
                             {code}
                         </span>
                     </div>
-                    {/* <div className="flex m-3 h-5/6 w-1/6 justify-center items-center border rounded bg-slate-300">
-                        
-                            {code}
-                        
-                    </div> */}
-               </>
-                
-                
+                    
+               </>                
                 }
 
               
             </div>
+
+
         </>
     )};
 

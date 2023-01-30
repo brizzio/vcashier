@@ -663,3 +663,33 @@ Above Code works Perfect. And this is just a small extension. If you want onclic
     <button className= "btn btn-primary" 
             onClick={this.yourFunctionHere}>RedirectTo</button>
 </div>
+
+
+========================================================================
+CodePen Home
+CSS filter generator to convert from black to target hex color
+https://codepen.io/sosuke/pen/Pjoqqp
+
+Use the sepia filter along with hue-rotate, brightness, and saturation to create any color we want.
+
+.colorize-pink {
+  filter: brightness(0.5) sepia(1) hue-rotate(-70deg) saturate(5);
+}
+https://css-tricks.com/solved-with-css-colorizing-svg-backgrounds/
+
+
+glyph {
+    display: inline-block;
+    width:  24px;
+    height: 24px;
+}
+
+glyph.star {
+  -webkit-mask: url(star.svg) no-repeat 100% 100%;
+  mask: url(star.svg) no-repeat 100% 100%;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  background-color: yellow;
+}
+
+

@@ -10,19 +10,15 @@ const NumericKb = (props) => {
   
   const [input, setInput] = useState({});
   const [layoutName, setLayoutName] = useState("default");
-  const [inputName, setInputName] = useState("default");
+  const keyboard = useRef();
 
+console.log('inputs no kb: ', input)
 
-const keyboard = useRef();
-
-const onChangeAll = input => {
-  /**
-   * Here we spread the inputs into a new object
-   * If we modify the same object, react will not trigger a re-render
-   */
-  setInput({ ...input });
+const onChange = input => {
+  setInput(input);
   console.log("Input changed", input);
-  props.onChange(input.default)
+  //props.onChange(input.default)
+  props.editUpc(input)
   //localStorage.setItem('input', JSON.stringify(input))
   
 };
@@ -32,6 +28,13 @@ const handleShift = () => {
   setLayoutName(newLayoutName);
 };
 
+const handleEnter = () => {
+  console.log('keyboard says: ', input.default)
+  props.upcDone()
+  console.log("input no done", input);
+  clear('')
+};
+
 const onKeyPress = button => {
   console.log("Button pressed", button);
 
@@ -39,19 +42,23 @@ const onKeyPress = button => {
    * If you want to handle the shift and caps lock buttons
    */
   if (button === "{shift}" || button === "{lock}") handleShift();
+  if (button === "{enter}" || button === "{lock}") handleEnter();
 };
 
 function onChangeInput(event){
-  const inputVal = event.target.value;
-  console.log("inputVal", inputVal);
-  //setInput(inputVal);
-
-  //keyboard.current.setInput(inputVal);
+  const input = event.target.value;
+  console.log('event.target.value: ', event.target.value)
+    setInput(input);
+    keyboard.current.setInput(input);
 };
 
-const getInputValue = () => {
-  return input[inputName] || "";
+function clear(value){
+  const input = value
+  console.log('event.target.value: ', value)
+    setInput(input);
+    keyboard.current.setInput(input);
 };
+
 
 
 
@@ -61,18 +68,16 @@ const getInputValue = () => {
               
       <div className="pb-2">
         <input className="hidden shadow appearance-none border rounded w-full py-2 px-1 text-black" 
-            id="default"
-            value={getInputValue()}
-            onFocus={() => setInputName("default")}
+            value={input}
             onChange={onChangeInput} 
         />
         {/* buttons: "1 2 3 4 5 6 7 8 9 {shift} 0 {bksp}" */}
         <Keyboard
         keyboardRef={r => (keyboard.current = r)}
-        inputName={inputName}
+
         layoutName={layoutName}
         onKeyPress={onKeyPress}
-        onChangeAll={onChangeAll}
+        onChange={onChange}
         theme={"hg-theme-default hg-layout-numeric numeric-theme myTheme gap-0"}
         buttonTheme= {[
           {
@@ -85,11 +90,19 @@ const getInputValue = () => {
           },
           {
             class: 'hg-side',
-            buttons: "{shift} {bksp}"
+            buttons: "{enter} {bksp}"
+          },
+          {
+            class: 'enter',
+            buttons: "{enter}"
+          },
+          {
+            class: 'del',
+            buttons: "{bksp}"
           }
         ]}
         layout={{
-          'default': ["1 2 3", "4 5 6", "7 8 9", "{shift} 0 {bksp}"],
+          'default': ["1 2 3", "4 5 6", "7 8 9", "{bksp} 0 {enter}"],
           'shift': ["! / #", "$ % ^", "& * (", "{shift} ) +"],
           'alpha': [
             '` 1 2 3 4 5 6 7 8 9 0 - = {bksp}',
@@ -107,8 +120,8 @@ const getInputValue = () => {
           ]
         }}
         display={{
-          '{bksp}': 'DEL',
-          '{enter}': '< enter',
+          '{bksp}': ' ',
+          '{enter}': ' ',
           '{shift}': 'SHIFT',
           '{s}': 'shift',
           '{tab}': 'tab',
