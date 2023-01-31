@@ -15,16 +15,65 @@ export const generatePriceFromUpc= (input)=> {
 
 }
 
-export const getLocalStorageDataByKey = function (key) {
+/**
+ * return a constant weight in grams based on a upc number
+ * @param {String} UPC  an product identifier number
+ */
 
-	// Get the existing data
-	var existing = localStorage.getItem(key);
+export const generateWeightFromUpc= (input)=> {
 
-	// If no existing data, create an array
-	// Otherwise, convert the localStorage string to an array
-	existing = existing ? JSON.parse(existing) : false;
+    let output = '';
 
-	return existing
+    let max = 2500
+    let min = 100
+
+
+    //safe measure for min max... they cant be equal
+    if(max - min === 0) return 0.9;
+
+  
+    for (let i = 0; i < input.length; i++) {
+    output += input[i].charCodeAt(0);
+    }
+
+    let number = output.replace(/\s+/g, '')
+    console.log(number)
+    while (number > 2500) {
+        number=parseInt(number/5)
+    }
+
+    let val = (number - min)/(max - min);
+    val = val*2500/1000/3
+
+
+    
+    return val.toFixed(3)
+
+}
+
+export const getLocalStorageDataByKey = (key) => {
+
+    // Get the existing data
+    var existing = localStorage.getItem(key);
+
+    // If no existing data, create an array
+    // Otherwise, convert the localStorage string to an array
+    existing = existing ? JSON.parse(existing) : false;
+
+    return existing;
+
+};
+
+export const getLocalStorageCollectionDataByKey = (key) => {
+
+    // Get the existing data
+    var existing = localStorage.getItem(key);
+
+    // If no existing data, create an array
+    // Otherwise, convert the localStorage string to an array
+    existing = existing ? JSON.parse(existing) : [];
+
+    return existing;
 
 };
 
@@ -47,6 +96,18 @@ export const appendLocalStorageCollection = function (collectionName, obj) {
 
 	// Save back to localStorage
 	localStorage.setItem(collectionName, JSON.stringify(updated));
+
+};
+
+/**
+ * replace a localStorage() collection with data from custom hook (context API)
+ * @param {string} collectionName  The localStorage() collection
+ * @param {obj} obj The entire new collection object
+ */
+export const updateLocalStorageCollectionFromHook = function (collectionName, obj) {
+
+    // Save to or replace localStorage
+	localStorage.setItem(collectionName, JSON.stringify(obj));
 
 };
 

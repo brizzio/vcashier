@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react'
 import Button from '../customUi/Button'
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../context/hooks/useAuth';
+import useInfo from '../context/hooks/useInfo';
 import BouncingDotsLoader from '../utils/BouncingDotsLoader/BouncingDotsLoader';
 import { generatePriceFromUpc,
+         generateWeightFromUpc,   
          appendLocalStorageCollection } from '../utils/Functions';
 import NumericKb from './NumericKb';
 
 import { ui, languages } from '../lexicon'
-import { Input } from 'postcss';
 
 const statuses = {
     idle:'sospeso',
@@ -16,9 +17,10 @@ const statuses = {
     manual:'manuale'
 }
 
-function DisplayProduct() {
+function DisplayProduct(props) {
 
     const { handleLogout } = useAuth()
+    const { insertItem } = useInfo()
 
     const navigate = useNavigate()
 
@@ -32,9 +34,17 @@ function DisplayProduct() {
 
     console.log('status', status)
 
+    useEffect(() => {
+        //getData(someParam).then(data => setState(data))
+        console.log('item setted>>>', item)
+      }, [setItem]) 
+
     const btnTitles = ui.btn
 
     const getItemByUpc = (upc) =>{
+        let rnd = Math.random();
+        let probabilityOfBePromo = 0.3 //In general, promo prices are 30% of total sales
+        let isPromo = rnd<probabilityOfBePromo?true:false
         
         var APIcall = {
         upc:upc,
@@ -42,7 +52,11 @@ function DisplayProduct() {
         brand:'MANUAL',
         manufacturer:'MANUAL ENTRY',
         department:'Department, of, manual, entry',
-        price:generatePriceFromUpc(upc).toFixed(2)
+        priceType:isPromo?'P':'R',
+        weight:Number(generateWeightFromUpc(upc)),
+        weightUnit:'Kg',
+        price:generatePriceFromUpc(upc).toFixed(2),
+        currency:'€'
         }
 
         return APIcall
@@ -72,10 +86,11 @@ function DisplayProduct() {
     setUpc('')
     setQuantity(1)
     //load item found to list queue
-    setItem(item)
+    //setItem(item)
     setStatus(statuses.automatic.toString())
-    //update local Storage
-    appendLocalStorageCollection('items', item)
+    //update context items variable
+    console.log('props.addItem(',item )
+    props.addItem(item)
   }
 
     function increment() {
@@ -247,7 +262,7 @@ const Scanned = (props)=>{
     
     }) => {
 
-       console.log('ManualView code ', code)
+       //console.log('ManualView code ', code)
 
     return(
         <>

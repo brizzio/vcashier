@@ -12,11 +12,11 @@ const NumericKb = (props) => {
   const [layoutName, setLayoutName] = useState("default");
   const keyboard = useRef();
 
-console.log('inputs no kb: ', input)
+//console.log('inputs no kb: ', input)
 
 const onChange = input => {
   setInput(input);
-  console.log("Input changed", input);
+  //console.log("Input changed", input);
   //props.onChange(input.default)
   props.editUpc(input)
   //localStorage.setItem('input', JSON.stringify(input))
@@ -36,7 +36,7 @@ const handleEnter = () => {
 };
 
 const onKeyPress = button => {
-  console.log("Button pressed", button);
+  //console.log("Button pressed", button);
 
   /**
    * If you want to handle the shift and caps lock buttons
@@ -47,14 +47,14 @@ const onKeyPress = button => {
 
 function onChangeInput(event){
   const input = event.target.value;
-  console.log('event.target.value: ', event.target.value)
+  //console.log('event.target.value: ', event.target.value)
     setInput(input);
     keyboard.current.setInput(input);
 };
 
 function clear(value){
   const input = value
-  console.log('event.target.value: ', value)
+  //console.log('event.target.value: ', value)
     setInput(input);
     keyboard.current.setInput(input);
 };

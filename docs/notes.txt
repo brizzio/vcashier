@@ -693,3 +693,46 @@ glyph.star {
 }
 
 
+=================================================================
+
+let input = "689456123";
+
+min=0.5
+max=1000
+
+let aux = reverseString(input)
+
+input = input + aux
+
+let output = '';
+    for (let i = 0; i < input.length; i++) {
+        output += input[i].charCodeAt(0);
+    }
+    let len = output.replace(/\s+/g, '').length
+    
+    let divider= Array(len).join('9')
+    
+    let num = output/divider
+    
+    let range = (num - min)/(max - min)
+    
+    let price = range*(max-min)
+
+    let dec = price.toString().slice(-2)
+    let result = Math.trunc(price) + dec/100
+
+
+
+console.log(input, aux)
+console.log(output, dec, len);
+console.log(divider);
+
+console.log(num);
+console.log(range);
+console.log(price);
+console.log(result);
+
+function reverseString(str) {
+  return (str === '') ? '' : reverseString(str.substr(1)) + str.charAt(0);
+}
+

@@ -1,133 +1,74 @@
 import React, { useState, useEffect }from 'react'
 import Button from '../customUi/Button'
-import { useNavigate } from 'react-router-dom';
 import { ui, languages } from '../lexicon'
+import { getLocalStorageDataByKey } from '../utils/Functions';
+import useInfo from '../context/hooks/useInfo';
 
-const items = [
-    {
-        quantity:1,
-        upc:'7908546855',
-        name:'Ice Tea: Limone 1,5 l',
-        brand:'Lipton',
-        manufacturer:'PEPSICO BEVERAGES ITALIA',
-        department:'Acqua, succhi e bibite',
-        weight:0.5,
-        priceType:'R',
-        price:'120,33'
-    }, 
-    {
-        quantity:1,
-        upc:'7908546855',
-        name:'Ice Tea: Limone 1,5 l',
-        brand:'Lipton',
-        manufacturer:'PEPSICO BEVERAGES ITALIA',
-        department:'Acqua, succhi e bibite',
-        weight:0.5,
-        priceType:'R',
-        price:'120,33'
-    }, 
-    {
-        quantity:1,
-        upc:'7908546855',
-        name:'Ice Tea: Limone 1,5 l',
-        brand:'Lipton',
-        manufacturer:'PEPSICO BEVERAGES ITALIA',
-        department:'Acqua, succhi e bibite',
-        priceType:'R',
-        weight:0.5,
-        price:'120,33'
-    }, 
-    {
-        quantity:1,
-        upc:'7908546855',
-        name:'Ice Tea: Limone 1,5 l',
-        brand:'Lipton',
-        manufacturer:'PEPSICO BEVERAGES ITALIA',
-        department:'Acqua, succhi e bibite',
-        weight:0.5,
-        priceType:'R',
-        price:'120,33'
-    }, 
-    {
-        quantity:1,
-        upc:'7908546855',
-        name:'Ice Tea: Limone 1,5 l',
-        brand:'Lipton',
-        manufacturer:'PEPSICO BEVERAGES ITALIA',
-        department:'Acqua, succhi e bibite',
-        weight:0.5,
-        priceType:'R',
-        price:'120,33'
-    }, 
-    {
-        quantity:1,
-        upc:'7908546855',
-        name:'Ice Tea: Limone 1,5 l',
-        brand:'Lipton',
-        manufacturer:'PEPSICO BEVERAGES ITALIA',
-        department:'Acqua, succhi e bibite',
-        weight:0.5,
-        priceType:'R',
-        price:'120,33'
-    }, 
-    {
-        quantity:1,
-        upc:'7908546855',
-        name:'Ice Tea: Limone 1,5 l',
-        brand:'Lipton',
-        manufacturer:'PEPSICO BEVERAGES ITALIA',
-        department:'Acqua, succhi e bibite',
-        weight:0.5,
-        priceType:'R',
-        price:'120,33'
-    }, 
-    {
-        quantity:1,
-        upc:'7908546855',
-        name:'Ice Tea: Limone 1,5 l',
-        brand:'Lipton',
-        manufacturer:'PEPSICO BEVERAGES ITALIA',
-        department:'Acqua, succhi e bibite',
-        weight:0.5,
-        priceType:'R',
-        price:'120,33'
-    }, 
-]
 
 
 const btnTitles = ui.btn
 
-const listItems = items.map((item, index) =>{
 
-let priceSpan = `x${item.quantity} € ${item.price}`
-//console.log('index', index.toString())
-return (
-<div key={'index'+ index} className='flex flex-row px-3 py-0.5 items-center justify-between text-xs text-gray-900 border-b border-gray-400'>
-    <div className='flex flex-row items-center'>
-        <span className="px-2">{item.name}</span>  
-        <span className="px-2">{item.upc}</span>         
-        <span className="px-2">{item.priceType}</span> 
-        <span className="px-2">{item.weight}</span><span>Kg</span>          
-    </div>  
-    <div className="py-1 px-1">
-        <div className="flex flex-row py-1 px-1 items-center gap-3">
-        <span>{priceSpan}</span>
-        <button><i className="fa-regular fa-trash-o" /></button>
-        </div>          
+
+const RenderListItem = ({item}) => {
+    //console.log('list item: ', item)
+
+    //console.log('index', index.toString())
+
+    var total = parseFloat(item.quantity) * parseFloat(item.price)
+
+    return (
+    <div className='flex flex-row px-3 py-0.5 items-center justify-between text-xs text-gray-900 border-b border-gray-400'>
+        <div className='flex flex-row items-center'>
+            <span className="px-2">{item.name}</span>  
+            <span className="px-2">{item.upc}</span>         
+            <span className="px-2">{item.priceType}</span> 
+            <span className="px-2">{item.weight}</span><span>{item.weightUnit}</span>          
+        </div>  
+        <div className="py-1 px-1">
+            <div className="flex flex-row py-1 px-1 items-center gap-3">
+            <span>
+            {`( X${item.quantity} ${item.price} ) ST: ${item.currency} ${total.toFixed(2)}`}    
+            </span>
+            <button><i className="fa-regular fa-trash-o" /></button>
+            </div>          
+        </div>
     </div>
-</div>
-)}
-);
+    )
+}
 
 
 
 
-const DisplayList = () => {
+const DisplayList = ({items}) => {
 
     const [lid, setLid] = useState("it")
-    const [count, setCount] = useState(0); // useState returns a pair. 'count' is the current state. 'setCount' is a function we can use to update the state.
+    const [count, setCount] = useState(0);
+    const [list, setList]= useState([])
+    // useState returns a pair. 'count' is the current state. 'setCount' is a function we can use to update the state.
+    /* var info = useInfo()
 
-    const navigate = useNavigate()
+    useEffect(()=>{
+
+        (async () => {
+            try {
+                const items = info.items
+                console.log('Display List effect info items', items)
+                setList(items)
+            } catch {
+                console.log("Display list data fetch error")
+            }
+        })()
+
+    })
+ */
+    useEffect(()=>{
+        console.log(  'display prop list items changed', items)
+      },[items])
+    
+
+    console.log('Display List Has Items: ', items, !items)
+    
 
     function increment() {
         //setCount(prevCount => prevCount+=1);
@@ -146,6 +87,14 @@ const DisplayList = () => {
         });
       }
   
+    const sumObjectArrayByProp = (arr, property)=>{
+        return arr.reduce((a, c, i, arr) => { /* … */ 
+                return property === 'quantity'? 
+                    a + parseFloat(c[property]):
+                    a + parseFloat(c[property]) * parseFloat(c['quantity'])
+        }, 0)
+          
+    } 
 
 
   return (
@@ -162,9 +111,16 @@ const DisplayList = () => {
                     <span className="px-2">Ora Inizio: 12:51:30</span>  
                 </div>  
             </div> 
-            <div id="table-body" className='flex flex-col h-11/12 overflow-y-scroll'>
-            {listItems}
-            </div>
+            {
+                !items?
+                <div>In attesa dello scanner...</div>:
+                <div id="table-body" className='flex flex-col min-h-11/12 overflow-y-scroll'>
+                {items.map(function(i, idx){
+                    return (<RenderListItem key={idx} item={i} />)
+                })}
+                </div>
+            }
+            
         </div>
         {/* ************* TotalsContainer **************************************** */}
         <div id="totals" className="flex flex-col w-full h-16 mt-auto ">
@@ -173,7 +129,7 @@ const DisplayList = () => {
                 <div className={`flex flex-row items-center justify-center border w-1/6 gap-3 rounded-full border-gray-700 py-1`}>
                     {/* <i className="material-icons" style={{fontSize:"48px"}}>cloud</i> */}
                     <i className="material-icons">shopping_cart</i>
-                    <span className={`text-2xl font-thin`}>7</span>
+                    <span className={`text-2xl font-thin`}>{sumObjectArrayByProp(items,'quantity')}</span>
                 </div>
 
                 <div className={`flex flex-row items-center justify-between	border border-gray-700 rounded-full w-1/4  py-1`}>
@@ -194,13 +150,13 @@ const DisplayList = () => {
 
                 <div className={`flex flex-row items-center justify-center border rounded-full border-gray-700 w-1/4 gap-3 py-1 `}>
                     <i className="fa-solid fa-weight-scale"></i>
-                    <span className={`text-2xl font-thin`}>13,5 Kg</span>
+                    <span className={`text-2xl font-thin`}>{sumObjectArrayByProp(items,'weight').toFixed(3)} Kg</span>
                 </div>  
 
 
                 <div className={`flex flex-row items-center justify-center border rounded-full border-gray-700 w-1/4 gap-2 px-2 py-1 `}>
                     <i className="fa-solid fa-euro-sign"></i>
-                    <span className={`text-2xl font-thin`}>1.250,00</span>
+                    <span className={`text-2xl font-thin`}>{sumObjectArrayByProp(items,'price').toFixed(2)}</span>
                 </div> 
             </div>
         </div>

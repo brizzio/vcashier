@@ -1,0 +1,27 @@
+useEffect(() => {
+    (async () => {
+        try {
+            await Promise.all([
+                fetch("/query/countries").then((response) => response.json()),
+                fetch("/query/projects").then((response) => response.json()),
+                fetch("/query/regions").then((response) => response.json())
+            ]).then(([country, project, region]) => {
+                // console.log(country, project, region);
+                setData({
+                    countries: country,
+                    projects: project,
+                    regions: region
+                });
+            })
+        } catch {
+            console.log("data fetch error")
+        }
+    })()
+}, [setData]);
+Alternatively, you can try React.useRef() for instant change in the React hook.
+
+const movies = React.useRef(null);
+useEffect(() => {
+movies.current='values';
+console.log(movies.current)
+}, [])
