@@ -14,3 +14,106 @@ export const generatePriceFromUpc= (input)=> {
     return Math.trunc(num)+ dec/100
 
 }
+
+export const getLocalStorageDataByKey = function (key) {
+
+	// Get the existing data
+	var existing = localStorage.getItem(key);
+
+	// If no existing data, create an array
+	// Otherwise, convert the localStorage string to an array
+	existing = existing ? JSON.parse(existing) : false;
+
+	return existing
+
+};
+
+/**
+ * Add an item to a localStorage() collection of objects
+ * @param {String} collectionName  The localStorage() collection
+ * @param {obj} obj The collection new object
+ */
+export const appendLocalStorageCollection = function (collectionName, obj) {
+
+	// Get the existing data
+	var existing = localStorage.getItem(collectionName);
+
+	// If no existing data, create an array
+	// Otherwise, convert the localStorage string to an array
+	existing = existing ? JSON.parse(existing) : [];
+
+	// Add new data to localStorage Collection
+	var updated = [...existing, obj];
+
+	// Save back to localStorage
+	localStorage.setItem(collectionName, JSON.stringify(updated));
+
+};
+
+/**
+ * Add an item to a localStorage() array
+ * @param {String} name  The localStorage() key
+ * @param {String} value The localStorage() value
+ */
+export const addToLocalStorageArray = function (name, value) {
+
+	// Get the existing data
+	var existing = localStorage.getItem(name);
+
+	// If no existing data, create an array
+	// Otherwise, convert the localStorage string to an array
+	existing = existing ? existing.split(',') : [];
+
+	// Add new data to localStorage Array
+	existing.push(value);
+
+	// Save back to localStorage
+	localStorage.setItem(name, existing.toString());
+
+};
+
+/**
+ * Add an item to a local storage string
+ * @param  {String} name      The localStorage() key
+ * @param  {String} value     The localStorage() value
+ * @param  {String} delimiter The delimiter to use to separate items
+ */
+export const addToLocalStorageString = function (name, value, delimiter) {
+
+	// Get the existing data
+	var existing = localStorage.getItem(name);
+
+	// If no existing data, use the value by itself
+	// Otherwise, add the new value to it
+	var data = existing ? existing + delimiter + value : value;
+
+	// Save back to localStorage
+	localStorage.setItem(name, data);
+
+};
+
+// Example
+//addToLocalStorageString('myFavoriteSandwich', 'tuna', ' and ');
+
+/**
+ * Add an item to a localStorage() object
+ * @param {String} name  The localStorage() key
+ * @param {String} key   The localStorage() value object key
+ * @param {String} value The localStorage() value object value
+ */
+export const addToLocalStorageObject = function (name, key, value) {
+
+	// Get the existing data
+	var existing = localStorage.getItem(name);
+
+	// If no existing data, create an array
+	// Otherwise, convert the localStorage string to an array
+	existing = existing ? JSON.parse(existing) : {};
+
+	// Add new data to localStorage Array
+	existing[key] = value;
+
+	// Save back to localStorage
+	localStorage.setItem(name, JSON.stringify(existing));
+
+};

@@ -3,7 +3,8 @@ import Button from '../customUi/Button'
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../context/hooks/useAuth';
 import BouncingDotsLoader from '../utils/BouncingDotsLoader/BouncingDotsLoader';
-import { generatePriceFromUpc } from '../utils/Functions';
+import { generatePriceFromUpc,
+         appendLocalStorageCollection } from '../utils/Functions';
 import NumericKb from './NumericKb';
 
 import { ui, languages } from '../lexicon'
@@ -61,7 +62,11 @@ function DisplayProduct() {
   const handleOnEnterUpcEvent = () => {
     console.log('upc entered: ', upc)
     var product = getItemByUpc(upc) 
-    var item={...product, quantity:quantity}
+    var item={...product, 
+                 quantity:quantity,
+                 entryDate:new Date().toISOString(),
+                 entryID:window.crypto.randomUUID()
+    }
     console.log('item>' , item)
     //clear values
     setUpc('')
@@ -69,6 +74,8 @@ function DisplayProduct() {
     //load item found to list queue
     setItem(item)
     setStatus(statuses.automatic.toString())
+    //update local Storage
+    appendLocalStorageCollection('items', item)
   }
 
     function increment() {
@@ -264,7 +271,7 @@ const Scanned = (props)=>{
                         <button 
                             className="text-xs bg-white border rounded-lg"
                             onClick={(e)=>{set(e.target.value)}}
-                            title={3}>3</button>
+                            value={3}>3</button>
                     
                         <button 
                             className="text-xs bg-white border rounded-lg"
