@@ -126,13 +126,13 @@ const DisplayList = ({items}) => {
         <div id="totals" className="flex flex-col w-full h-16 mt-auto ">
             <div className={`flex flex-row items-center justify-between w-full h-full mt-0 pr-3 gap-4 `}>
 
-                <div className={`flex flex-row items-center justify-center border w-1/6 gap-3 rounded-full border-gray-700 py-1`}>
+                <div className={`flex flex-row items-center justify-center border w-1/6 gap-3 rounded-full border-slate-300 py-1`}>
                     {/* <i className="material-icons" style={{fontSize:"48px"}}>cloud</i> */}
                     <i className="material-icons">shopping_cart</i>
                     <span className={`text-2xl font-thin`}>{sumObjectArrayByProp(items,'quantity')}</span>
                 </div>
 
-                <div className={`flex flex-row items-center justify-between	border border-gray-700 rounded-full w-1/4  py-1`}>
+                <div className={`flex flex-row items-center justify-between	border border-slate-300 rounded-full w-1/4  py-1`}>
                     <button onClick={decrement}>
                     <i className="fa-solid fa-minus pl-3"></i>
                 </button>
@@ -148,13 +148,13 @@ const DisplayList = ({items}) => {
                 
                 </div> 
 
-                <div className={`flex flex-row items-center justify-center border rounded-full border-gray-700 w-1/4 gap-3 py-1 `}>
+                <div className={`flex flex-row items-center justify-center border rounded-full border-slate-300 w-1/4 gap-3 py-1 `}>
                     <i className="fa-solid fa-weight-scale"></i>
                     <span className={`text-2xl font-thin`}>{sumObjectArrayByProp(items,'weight').toFixed(3)} Kg</span>
                 </div>  
 
 
-                <div className={`flex flex-row items-center justify-center border rounded-full border-gray-700 w-1/4 gap-2 px-2 py-1 `}>
+                <div className={`flex flex-row items-center justify-center border rounded-full border-slate-300 w-1/4 gap-2 px-2 py-1 `}>
                     <i className="fa-solid fa-euro-sign"></i>
                     <span className={`text-2xl font-thin`}>{sumObjectArrayByProp(items,'price').toFixed(2)}</span>
                 </div> 

@@ -10,7 +10,7 @@ const classes = {
         large: 'px-8 py-3 text-lg'
     },
     variant: {
-        primary: 'bg-transparent hover:bg-[#051619] text-[#051619] hover:text-white border border-[#051619] hover:border-transparent rounded',
+        primary: 'bg-white hover:bg-[#336770] text-[#051619] rounded-md border-slate-200 shadow-md hover:text-white border border-[#051619] hover:border-transparent rounded',
         secondary: 'bg-gray-200 hover:bg-gray-800 focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 text-gray-900 hover:text-white',
         danger: 'bg-red-500 hover:bg-red-800 focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 text-white',
         main:'bg-transparent hover:bg-[#051619] text-[#051619]  hover:text-white py-2 px-4 border border-[#051619] hover:border-transparent rounded'
