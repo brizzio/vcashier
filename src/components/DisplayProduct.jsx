@@ -3,7 +3,7 @@ import Button from '../customUi/Button'
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../context/hooks/useAuth';
 import useInfo from '../context/hooks/useInfo';
-import useLocalStorage from '../context/hooks/uselocalStorage';
+
 import BouncingDotsLoader from '../utils/BouncingDotsLoader/BouncingDotsLoader';
 import { generatePriceFromUpc,
          generateWeightFromUpc,   
@@ -22,7 +22,7 @@ function DisplayProduct(props) {
 
     const { handleLogout } = useAuth()
     const { insertItem } = useInfo()
-    const ls = useLocalStorage()
+    
 
     const navigate = useNavigate()
 

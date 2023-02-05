@@ -4,7 +4,6 @@ import Cashier from "./pages/Cashier"
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import AuthProvider from "./context/AuthProvider";
 import InfoProvider from "./context/InfoProvider";
-import LocalStorageProvider from "./context/LocalStorageProvider";
 import useAuth from "./context/hooks/useAuth";
 
 
@@ -38,7 +37,7 @@ function App() {
 
     <div className="w-[84rem] h-[38rem] bg-white box-border border-2 border-zinc-300 rounded-2xl shadow shadow-2xl">
     <Router>
-      <LocalStorageProvider>
+      
         <AuthProvider>
           <InfoProvider>
             <Routes>
@@ -49,7 +48,7 @@ function App() {
             </Routes> 
           </InfoProvider>
         </AuthProvider>
-      </LocalStorageProvider>
+      
     </Router>
         
 
