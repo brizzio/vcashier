@@ -7,9 +7,13 @@ import { getLocalStorageCollectionDataByKey,
 
 const useInfo = () => {
  
+  let counts = useRef({})
+
   const [items, setItems ] = useState([])
   const [loadingInfo, setLoadingInfo] = useState(false)
   const [updateCount, setUpdateCount] = useState(0)
+
+  
   
   const renderCount= useRef(0)
 
@@ -45,11 +49,64 @@ const useInfo = () => {
    
     const updateItemsInLocalStorage=()=>updateLocalStorageCollectionFromHook('items', items)
   
-    const insertItem = (item) =>{
-      setItems((items)=>[...items, item])
-      appendLocalStorageCollection('items', item)
+    const insertItem = async (item) =>{
+      //group items and count ocurrences
+      let evaluated ={}
+      counts[item.upc] = counts[item.upc]?Number(counts[item.upc]) + Number(item.quantity):Number(item.quantity)
+      console.log('counts: ', counts)
+      
+      for (let i = 1; i <= item.quantity; i++) {
+        item.order = i + "/" + item.quantity
+        console.log('vai processar o item: ', item.order)
+        evaluated = await evaluateItem(item)
+        setItems((items)=>[...items, evaluated])
+        appendLocalStorageCollection('items', evaluated)
+      }
+
+     
+      
       setUpdateCount(prevCount => prevCount + 1)
+
+
     } 
+
+
+    const evaluateItem = (scanned)=>{
+
+      // set index of item in cart
+      scanned.index = items.length + 1
+
+      
+
+      scanned.priceType = scanned.promoType>0?'P':'R'
+
+      if (scanned.promoType>0){
+
+       
+
+        if(scanned.promoType==1 && scanned.nthUnit==1){
+          //calculates discount value based on porcentage or strict value
+          let discountValue = scanned.regularPrice*scanned.discount
+          scanned.discountValue = discountValue.toFixed(2)
+           
+          //calculates the final price based on discount value or strict value 
+          scanned.calculatedPrice = (scanned.regularPrice-scanned.discountValue)
+
+          } else {
+          
+          scanned.calculatedPrice = scanned.regularPrice
+      
+        }
+
+      }else {
+        
+          scanned.calculatedPrice = scanned.regularPrice
+    
+      }
+
+      return scanned
+
+    }
   
   return (
     {

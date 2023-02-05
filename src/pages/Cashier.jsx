@@ -12,7 +12,7 @@ function Cashier() {
   const {items, loadingInfo, insertItem } = useInfo()
   
   const [loading , setLoading] = useState(true)
-  const [swap, setSwap] = useState(false)
+  const [swap, setSwap] = useState(true)
   const [listItems, setListItems] = useState(items)
   const rend = useRef(0)
   

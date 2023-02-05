@@ -73,9 +73,9 @@ function TopInfo(props) {
             </div>
 
          </div>
-         <div id="topLeft" className={`flex flex-row items-center justify-around h-full w-full text-zinc-900`}>
+         <div id="topLeft" className={`flex flex-row items-center justify-around h-full w-[78rem] mr-5 text-zinc-900 border border-2 mt-4 mb-2 rounded rounded-xl shadow-md bg-white`}>
 
-            <div className={`flex flex-row
+            {/* <div className={`flex flex-row
                 h-3/6 w-1/6
                 items-center justify-center border-zinc-500 border-b-4 gap-2`}>
                 <i className="fa-solid fa-calendar-days fa-lg"></i>
@@ -91,7 +91,7 @@ function TopInfo(props) {
                 items-center justify-center border-zinc-500 border-b-4 gap-2`}>
                 <i className="fa-regular fa-address-card fa-lg"></i>
                 <p className={`text-lg` }>CLIENTE</p>
-            </div>
+            </div> */}
 
 
          </div>

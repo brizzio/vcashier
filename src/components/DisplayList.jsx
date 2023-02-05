@@ -15,20 +15,21 @@ const RenderListItem = ({item}) => {
 
     //console.log('index', index.toString())
 
-    var total = parseFloat(item.quantity) * parseFloat(item.price)
+    var total = parseFloat(item.calculatedPrice)
 
     return (
     <div className='flex flex-row px-3 py-0.5 items-center justify-between text-xs text-gray-900 border-b border-gray-400'>
         <div className='flex flex-row items-center'>
-            <span className="px-2">{item.name}</span>  
-            <span className="px-2">{item.upc}</span>         
+            <span className="px-2">{item.upc}</span> 
+            <span className="px-2">{item.name}</span> 
+            <span className="px-2">{}</span>         
             <span className="px-2">{item.priceType}</span> 
             <span className="px-2">{item.weight}</span><span>{item.weightUnit}</span>          
         </div>  
         <div className="py-1 px-1">
             <div className="flex flex-row py-1 px-1 items-center gap-3">
             <span>
-            {`( X${item.quantity} ${item.price} ) ST: ${item.currency} ${total.toFixed(2)}`}    
+            {`( ${item.order} )    ${item.currency} ${total.toFixed(2)}`}    
             </span>
             <button><i className="fa-regular fa-trash-o" /></button>
             </div>          
@@ -68,6 +69,7 @@ const DisplayList = ({items}) => {
     
 
     console.log('Display List Has Items: ', items, !items)
+    console.log('Display List Items Count: ', Object.keys(items).length)
     
 
     function increment() {
@@ -87,11 +89,11 @@ const DisplayList = ({items}) => {
         });
       }
   
+    //sumObjectArrayByProp(items,'quantity')  
     const sumObjectArrayByProp = (arr, property)=>{
         return arr.reduce((a, c, i, arr) => { /* … */ 
-                return property === 'quantity'? 
-                    a + parseFloat(c[property]):
-                    a + parseFloat(c[property]) * parseFloat(c['quantity'])
+                return Number(a) + Number(c[property])
+                    
         }, 0)
           
     } 
@@ -129,7 +131,7 @@ const DisplayList = ({items}) => {
                 <div className={`flex flex-row items-center justify-center border w-1/6 gap-3 rounded-full border-slate-300 py-1`}>
                     {/* <i className="material-icons" style={{fontSize:"48px"}}>cloud</i> */}
                     <i className="material-icons">shopping_cart</i>
-                    <span className={`text-2xl font-thin`}>{sumObjectArrayByProp(items,'quantity')}</span>
+                    <span className={`text-2xl font-thin`}>{Object.keys(items).length}</span>
                 </div>
 
                 <div className={`flex flex-row items-center justify-between	border border-slate-300 rounded-full w-1/4  py-1`}>
@@ -156,12 +158,12 @@ const DisplayList = ({items}) => {
 
                 <div className={`flex flex-row items-center justify-center border rounded-full border-slate-300 w-1/4 gap-2 px-2 py-1 `}>
                     <i className="fa-solid fa-euro-sign"></i>
-                    <span className={`text-2xl font-thin`}>{sumObjectArrayByProp(items,'price').toFixed(2)}</span>
+                    <span className={`text-2xl font-thin`}>{sumObjectArrayByProp(items,'calculatedPrice').toFixed(2)}</span>
                 </div> 
             </div>
         </div>
         
-        <Button variant="primary" size="small" className="h-12 mb-2  w-full" onClick={() => console.log('checkout clicked')}>{btnTitles.checkout[lid].toUpperCase()}</Button>
+        <Button variant="primary" size="small" className="h-12 w-full" onClick={() => console.log('checkout clicked')}>{btnTitles.checkout[lid].toUpperCase()}</Button>
     </div>
     
   )
