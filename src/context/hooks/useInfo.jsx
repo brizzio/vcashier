@@ -4,18 +4,35 @@ import { getLocalStorageCollectionDataByKey,
          updateLocalStorageCollectionFromHook, 
          appendLocalStorageCollection 
         } from "../../utils/Functions";
+import priceList from '../../utils/prices.json'
 
 const useInfo = () => {
  
   let counts = useRef({})
+ 
 
   const [items, setItems ] = useState([])
   const [loadingInfo, setLoadingInfo] = useState(false)
   const [updateCount, setUpdateCount] = useState(0)
 
-  
-  
   const renderCount= useRef(0)
+  //on startup
+
+  useEffect(()=>{
+
+    (async () => {
+      try {
+        localStorage.setItem('priceList', JSON.stringify(priceList));
+        console.log('info useffect priceList')
+      } catch {
+          console.log("error setting pricelist")
+      }
+  })()
+      
+  },[])
+
+  
+  
 
     useEffect(()=>{
 
