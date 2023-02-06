@@ -49,7 +49,7 @@ useEffect(()=>{
   function verifySwap(){
     setLoading(true)
     const localSwap = localStorage.getItem('swap');
-    const swap = localSwap?JSON.parse(localStorage.getItem('swap')):false;
+    const swap = localSwap?JSON.parse(localStorage.getItem('swap')):true;
     console.log(' verifySwap', !!swap)
     setLoading(false)
     return !!swap
