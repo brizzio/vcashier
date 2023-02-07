@@ -1,6 +1,9 @@
 import React, { useState, useEffect }from 'react'
 import Button from '../customUi/Button'
 import { ui, languages } from '../lexicon'
+
+import CloseCart from '../modals/CloseCart';
+
 import { getLocalStorageDataByKey } from '../utils/Functions';
 import useInfo from '../context/hooks/useInfo';
 
@@ -163,7 +166,9 @@ const DisplayList = ({items}) => {
             </div>
         </div>
         
-        <Button variant="primary" size="small" className="h-12 w-full" onClick={() => console.log('checkout clicked')}>{btnTitles.checkout[lid].toUpperCase()}</Button>
+        
+        <CloseCart buttonText="CHIUDI CONTO" />
+
     </div>
     
   )
