@@ -9,7 +9,7 @@ function Bill(props) {
 
   useEffect(() => {
 
-      console.log(props.value + " count changed! --", count);
+      //console.log(props.value + " count changed! --", count);
 
       props.update(props.value, count)
    
@@ -19,7 +19,7 @@ function Bill(props) {
   }, [count]);
 
   useEffect(()=>{
-    console.log(`${props.value} --- props.reset! --`, props.reset)
+    //console.log(`${props.value} --- props.reset! --`, props.reset)
     if (props.reset) setCount(0)
   },[props.reset]);
 

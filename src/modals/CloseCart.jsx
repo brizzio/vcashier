@@ -169,7 +169,7 @@ const CloseCart = (props) => {
         return Number(a) + Number(c['calculatedPrice'])
         }, 0)
 
-        let closeCartItemsTotalByCalculatedPrice = sum
+        console.log('amount', sum)
         setAmount(sum)
     },[]);
    
@@ -177,7 +177,7 @@ const CloseCart = (props) => {
 
     useEffect(() => {
 
-      console.log(" >> bills changed! --", bills);
+      //console.log(" >> bills changed! --", bills);
       setMoneyTotal((total(bills)))
       
       
@@ -193,7 +193,7 @@ const CloseCart = (props) => {
 
     useEffect(() => {
 
-      console.log(" >> money total  changed! --", moneyTotal)
+      //console.log(" >> money total  changed! --", moneyTotal)
       calculateChange()
       
     }, [moneyTotal]);
@@ -208,7 +208,7 @@ const CloseCart = (props) => {
 
     function updateCoins(face, coin, count){
 
-      console.log(" >> update coins  --", face, coin, count);
+      //console.log(" >> update coins  --", face, coin, count);
 
       const obj ={[face]:{face:face, count:count, value: coin/100*count}}
 
@@ -230,7 +230,7 @@ const CloseCart = (props) => {
         //console.log(`${k}: ${v.value}`);
         sum = sum + parseFloat(v.value.toString())
       }
-      console.log(`moneyTotal = ${sum}`);
+      //console.log(`moneyTotal = ${sum}`);
       //console.log(`toPay = ${toPay.current.value}`);
       //console.log(`given = ${given.current.value}`);
       //console.log(`change = ${change.current.value}`);

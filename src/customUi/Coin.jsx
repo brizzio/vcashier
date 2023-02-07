@@ -9,11 +9,11 @@ function Coin(props) {
   useEffect(() => {
 
     if(props.reset){
-      console.log(`${props.value}C --- resetting count! --`, count);
+      //console.log(`${props.value}C --- resetting count! --`, count);
       setCount(0)
     }else{
 
-       console.log(`${props.value}C --- count changed! --`, count);
+       //console.log(`${props.value}C --- count changed! --`, count);
 
         props.update(`${props.value}C` , props.value, count)
     }
@@ -22,7 +22,7 @@ function Coin(props) {
   }, [count]);
 
   useEffect(()=>{
-    console.log(`${props.face} --- props.reset! --`, props.reset)
+    //console.log(`${props.face} --- props.reset! --`, props.reset)
     if (props.reset) setCount(0)
   },[props.reset]);
 
