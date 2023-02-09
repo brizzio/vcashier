@@ -24,7 +24,7 @@ function Cashier() {
     
 },[])
 
-useEffect(()=>{
+/* useEffect(()=>{
 
   (async () => {
       try {
@@ -35,7 +35,7 @@ useEffect(()=>{
       }
   })()
   rend.current = rend.current + 1
-})
+}) */
 
  
 
@@ -66,10 +66,11 @@ useEffect(()=>{
     )
   }
 
-  const handleInsertItem = (item) =>{ 
-    insertItem(item)
-    console.log(  'handleInsertItem update list')
-    setListItems(prevlist => [...prevlist, item])
+  const handleInsertItem = async (upc, q) =>{ 
+    await insertItem(upc, q)
+    console.log(  'handleInsertItem update list',items)
+    let list = JSON.parse(localStorage.getItem('items'))
+    setListItems(list)
   }
 
   return (

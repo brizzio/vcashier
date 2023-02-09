@@ -9,13 +9,13 @@ import priceList from '../../utils/prices.json'
 const useInfo = () => {
  
   let counts = useRef({})
- 
+  let renderCount= useRef(0)
 
   const [items, setItems ] = useState([])
   const [loadingInfo, setLoadingInfo] = useState(false)
   const [updateCount, setUpdateCount] = useState(0)
 
-  const renderCount= useRef(0)
+  
   //on startup
 
   useEffect(()=>{
@@ -25,16 +25,23 @@ const useInfo = () => {
         localStorage.setItem('priceList', JSON.stringify(priceList));
         console.log('info useffect priceList')
       } catch {
-          console.log("error setting pricelist")
+          console.log("info error setting pricelist")
       }
   })()
       
   },[])
 
-  
+  useEffect(()=>{
+   
+        localStorage.setItem('items', JSON.stringify(items));
+        console.log('info useffect update items in local storage', items)
+     
+       
+  },[items])
+
   
 
-    useEffect(()=>{
+    /* useEffect(()=>{
 
       (async () => {
         try {
@@ -50,7 +57,10 @@ const useInfo = () => {
         console.log('info useffect updates:', updateCount)
         console.log('info useffect items:', items)
         
-    },[setItems, updateCount])
+    },[setItems, updateCount]) */
+
+
+    
 
     const loadDatafromLocalStorage = ()=>{
       setLoadingInfo(true)
@@ -65,35 +75,103 @@ const useInfo = () => {
     }
    
     const updateItemsInLocalStorage=()=>updateLocalStorageCollectionFromHook('items', items)
-  
-    const insertItem = async (item) =>{
-      //group items and count ocurrences
-      let evaluated ={}
-      counts[item.upc] = counts[item.upc]?Number(counts[item.upc]) + Number(item.quantity):Number(item.quantity)
-      console.log('counts: ', counts)
-      
-      for (let i = 1; i <= item.quantity; i++) {
-        item.order = i + "/" + item.quantity
-        console.log('vai processar o item: ', item.order)
-        evaluated = await evaluateItem(item)
-        setItems((items)=>[...items, evaluated])
-        appendLocalStorageCollection('items', evaluated)
-      }
-
-     
-      
-      setUpdateCount(prevCount => prevCount + 1)
-
-
+    
+    const updateItem = (id, key, value) =>{
+      let i = items.findIndex((obj => obj.id == id));
+      setItems(prev =>  [...prev, prev[i][key]=value])
     } 
 
+    async function getProductByUpc(upc){
 
-    const evaluateItem = (scanned)=>{
+      let filtered = priceList.filter((p) => p.upc == upc)
+      if(filtered){
+        return filtered[0]
+      }else{
+        return {}
+      }
+    }
+    
+    const insertItem = async (upc, quant) =>{
 
-      // set index of item in cart
-      scanned.index = items.length + 1
+      let arrOfNewItems=[]
+      let evaluated = {}
+      let newItem = {}
+      let newList = []
 
+      console.log('vai processar insert: ', upc, quant)
+      let product = await getProductByUpc(upc)
+
+      try {
+
+         for (let i = 1; i <= quant; i++) {
+
+        // set index of item in cart
+        newItem = {...product}
+        newItem.index = items.length + 1
+        newItem.order = `${i}/${quant}` 
+        newItem.deleted = false
+        newItem.entryID=window.crypto.randomUUID()
+        console.log('no for: ', newItem)
+        evaluated = await evaluateItem(newItem)
+        arrOfNewItems.push(evaluated)
+        
+        //appendLocalStorageCollection('items', evaluated)
+      }
+      } catch (error) {
+        console.error(error);
+      }finally {
+        console.log('no fim do loop do insert');
+        console.log('arrOfNewItems: ', arrOfNewItems)
+        setItems(prev => prev.concat(arrOfNewItems))
+      }
+
+
+    }
+
+
+
+    /* const insertItem = async (item) =>{
+      //group items and count ocurrences
+      let arrOfNewItems=[]
+      let evaluated ={}
+      let newList = []
+      counts[item.upc] = counts[item.upc]?Number(counts[item.upc]) + Number(item.quantity):Number(item.quantity)
+      console.log('counts: ', counts)
+
+      try {
+
+        for (let i = 1; i <= item.quantity; i++) {
+          
+          arrOfNewItems.push(evaluateItem(item, i))
+          console.log('arrOfNewItems: ', arrOfNewItems)
+          //appendLocalStorageCollection('items', evaluated)
+        }
+  
+        newList = items.concat(arrOfNewItems)
+        console.log('newList:', newList)
+        setItems(newList)
+        
+        setUpdateCount(prevCount => prevCount + 1)
+        
+      } catch (error) {
+        console.log('insert item error', item, evaluated)
+      }
       
+      
+
+
+    }  */
+
+
+    const evaluateItem = async(objItem)=>{
+
+      let scanned = {}
+
+      scanned = objItem
+      
+      
+      console.log('evaluate vai processar o item: ', scanned)
+  
 
       scanned.priceType = scanned.promoType>0?'P':'R'
 
@@ -107,7 +185,7 @@ const useInfo = () => {
           scanned.discountValue = discountValue.toFixed(2)
            
           //calculates the final price based on discount value or strict value 
-          scanned.calculatedPrice = (scanned.regularPrice-scanned.discountValue)
+          scanned.calculatedPrice = scanned.exactDiscountedPrice?scanned.exactDiscountedPrice:(scanned.regularPrice-scanned.discountValue)
 
           } else {
           
@@ -121,6 +199,7 @@ const useInfo = () => {
     
       }
 
+      console.log('no fim do evaluate', scanned)
       return scanned
 
     }

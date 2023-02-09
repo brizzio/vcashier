@@ -1,0 +1,3 @@
+With tailwind v3 you are able to use arbitrary values to achieve this.
+
+Use [&::-webkit-scrollbar]:hidden on your HTML element classList.

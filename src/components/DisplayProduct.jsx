@@ -64,14 +64,27 @@ function DisplayProduct(props) {
 
   const handleUpcChange = (keyboardInput) => setUpc(keyboardInput)
 
-  const handleOnEnterUpcEvent = () => {
+  const handleOnEnterUpcEvent = async() => {
+    console.log('upc entered: ', upc)
+    await props.addItem(upc, quantity)
+     //clear values
+     setUpc('')
+     setQuantity(1)
+     console.log('end of insert ', upc)
+
+
+  }
+
+
+
+  /* const handleOnEnterUpcEvent = () => {
     console.log('upc entered: ', upc)
     let filtered = prices.filter((p) => p.upc == upc)
     var product = filtered ? filtered[0] : filtered; 
     var item={...product, 
                  quantity:quantity,
                  entryDate:new Date().toISOString(),
-                 entryID:window.crypto.randomUUID()
+                 
     }
     console.log('item>' , item)
     //clear values
@@ -86,7 +99,7 @@ function DisplayProduct(props) {
         props.addItem(item)
     }
     
-  }
+  } */
 
     function increment() {
 

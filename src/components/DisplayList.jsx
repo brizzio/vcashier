@@ -11,6 +11,10 @@ import useInfo from '../context/hooks/useInfo';
 
 const btnTitles = ui.btn
 
+const removeItemFromCart= (e)=>{
+    console.log('event.currentTarget.dataset.id', e.currentTarget.id); // >> id
+}
+
 
 
 const RenderListItem = ({item}) => {
@@ -26,15 +30,20 @@ const RenderListItem = ({item}) => {
             <span className="px-2">{item.upc}</span> 
             <span className="px-2">{item.name}</span> 
             <span className="px-2">{}</span>         
-            <span className="px-2">{item.priceType}</span> 
             <span className="px-2">{item.weight}</span><span>{item.weightUnit}</span>          
         </div>  
         <div className="py-1 px-1">
             <div className="flex flex-row py-1 px-1 items-center gap-3">
             <span>
-            {`( ${item.order} )    ${item.currency} ${total.toFixed(2)}`}    
+            {`( ${item.order} ) `}    
             </span>
-            <button><i className="fa-regular fa-trash-o" /></button>
+            <span>{item.currency}</span>
+            <span>{total.toFixed(2)}</span>
+            <span className="px-2">{item.priceType}</span> 
+            <button id={item.entryID} 
+                    onClick={event=>removeItemFromCart(event)}>
+                <i className="fa-regular fa-trash-can"></i>
+            </button>
             </div>          
         </div>
     </div>
@@ -107,8 +116,8 @@ const DisplayList = ({items}) => {
     <div className="flex flex-col h-full w-3/6 mr-2">
 
        
-        <div id="list" className={`flex flex-col w-full h-80  mt-1 pt-4 pr-3`}>
-            <div id="table-header" className='flex flex-row items-center justify-between py-2 px-3 text-xs border-y border-gray-800' >
+        <div id="list" className={`flex flex-col w-full h-80  mt-1 pt-3`}>
+            <div id="table-header" className='flex flex-row items-center justify-between py-2 px-3 text-xs border rounded-md border-indigo-400' >
                 <div>
                     <span className="px-2">CARRELLO SPESA</span>
                     <span className="px-2">Data: 26/12/2022</span> 
@@ -119,7 +128,7 @@ const DisplayList = ({items}) => {
             {
                 !items?
                 <div>In attesa dello scanner...</div>:
-                <div id="table-body" className='flex flex-col min-h-11/12 overflow-y-scroll'>
+                <div id="table-body" className='flex flex-col min-h-11/12 overflow-y-scroll [&::-webkit-scrollbar]:hidden px-2'>
                 {items.map(function(i, idx){
                     return (<RenderListItem key={idx} item={i} />)
                 })}
