@@ -34,18 +34,27 @@ const CloseCart = (props) => {
 
     const closeModal = () => setShowModal(false)
 
-    useEffect(() => {
+    const getItems = async() => {
       const items = JSON.parse(localStorage.getItem('items'));
       if (items) {
         console.log('closeCart items: ', items)
-        setCloseCartItems(items)
-      }
-    }, []);
+        
+      };
+      return items
+    }
+
+
+    const show = async()=>{
+
+      let itemsList = await getItems()
+      setCloseCartItems(itemsList)
+      setShowModal(true)
+    }
     
 
     return (
       <>
-        <Button variant="primary" size="small" className="h-12 w-full" onClick={() => setShowModal(true)}>{props.buttonText}</Button>
+        <Button variant="primary" size="small" className="h-12 w-full" onClick={() => show() }>{props.buttonText}</Button>
         
         {showModal ? (
           <>
