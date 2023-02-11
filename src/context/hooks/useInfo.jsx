@@ -8,10 +8,9 @@ import priceList from '../../utils/prices.json'
 
 const useInfo = () => {
  
-  let counts = useRef({})
-  let renderCount= useRef(0)
+  
 
-  const [items, setItems ] = useState([])
+  const [items, setItems ] = useState(initItems())
   const [loadingInfo, setLoadingInfo] = useState(false)
   const [updateCount, setUpdateCount] = useState(0)
 
@@ -30,6 +29,15 @@ const useInfo = () => {
   })()
       
   },[])
+
+  function initItems(){
+    const stored = localStorage.getItem('items');
+
+    return stored? JSON.parse(stored): []
+    
+}
+
+
 
   useEffect(()=>{
    
@@ -62,19 +70,7 @@ const useInfo = () => {
 
     
 
-    const loadDatafromLocalStorage = ()=>{
-      setLoadingInfo(true)
-      const savedItems = getLocalStorageCollectionDataByKey('items')
-      setLoadingInfo(false)
-      return savedItems
-    }
-
-    const getItems = () => {
-      console.log('vai ler os items do info hook', items)
-      return items
-    }
-   
-    const updateItemsInLocalStorage=()=>updateLocalStorageCollectionFromHook('items', items)
+    
     
     const updateItem = (id, key, value) =>{
       let i = items.findIndex((obj => obj.id == id));

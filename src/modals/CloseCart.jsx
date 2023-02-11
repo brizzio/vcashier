@@ -9,6 +9,7 @@ import Coin from '../customUi/Coin';
 //import { CreditCard2BackFill } from '@styled-icons/bootstrap'
 //import { MoneyCheckDollar }  from '@styled-icons/fa-solid'
 import NumericKb from "../components/NumericKb";
+import { sumByPropertie } from "../utils/Functions";
 
 
 
@@ -19,6 +20,8 @@ const CloseCart = (props) => {
     const [showModal, setShowModal] = useState(false);
     const [view, setView] = useState('default');
     const [closeCartItems, setCloseCartItems] = useState([])
+    const [cartTotal, setCartTotal] = useState(0)
+  
     
     const changeView = (newView) => 
     {
@@ -47,8 +50,17 @@ const CloseCart = (props) => {
     const show = async()=>{
 
       let itemsList = await getItems()
+
+      let cartTotal = await sumByPropertie(itemsList, 'calculatedPrice')
+
       setCloseCartItems(itemsList)
+      setCartTotal(cartTotal)
       setShowModal(true)
+    }
+
+    const handleWrapUp = async()=>{
+      console.log('end close cart process ')
+      setView('finalizza')
     }
     
 
@@ -65,7 +77,7 @@ const CloseCart = (props) => {
                 <div className=" h-full border-2 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none overflow-visible">
 
                   <div className="flex items-start justify-between min-h-4 p-3 border-b border-solid border-gray-300 rounded-t ">
-                    <h3 className="text-xl font=semibold">{props.buttonText}</h3>
+                    <h3 className="text-xl font=semibold">{view==='finalizza'?'FINALIZZA':props.buttonText}</h3>
                     
                     <button
                       className="bg-transparent border-0 text-black float-right"
@@ -82,24 +94,39 @@ const CloseCart = (props) => {
 
                         {view === 'cash' && <Cash title='Pagamento in Contanti'
                                                   items={closeCartItems}
+                                                  total={cartTotal}
+                                                  handler={handleWrapUp}
                                                   back={goBack}
                                                   close={closeModal}
                         />}
                         {view === 'bancomat' && <Bancomat title='Bancomat o Carte da Credito'
+                                                  total={cartTotal}
+                                                  handler={handleWrapUp}
                                                   back={goBack}
                                                   close={closeModal}
                         /> }
 
                         {view === 'bonus' && <Bonus title='Carte Bonus o Gift Cards'
+                                                  total={cartTotal}
+                                                  handler={handleWrapUp}
                                                   back={goBack}
                                                   close={closeModal}
                         /> }
 
                         {view === 'other' && <Other title='Diverse forme di pagamento'
+                                                  total={cartTotal}
+                                                  handler={handleWrapUp}
                                                   back={goBack}
                                                   close={closeModal}
                         /> }
-                          
+                        
+                        {view === 'finalizza' && <WrapUp
+                                                  title='Finalizza il carrello'
+                                                  items={closeCartItems}
+                                                  total={cartTotal}
+                                                  handler={handleWrapUp}
+                                                  close={closeModal}
+                        /> }
                       
                        
                     </div>
@@ -430,7 +457,7 @@ const CloseCart = (props) => {
            <Button variant="primary" size="small" className={`h-10 w-40 mb-1  ml-3 ${showSplit?'hidden':''}`} onClick={() => (setReset(true))}>CANCELLA</Button>
            <Button variant="primary" size="small" className={`h-10 w-40 mb-1  ml-3 ${showSplit?'hidden':''}`} onClick={() => (true)}>APRIRE CASSETTO</Button>
            <Button variant="primary" size="small" className={`h-10 w-40 mb-1  ml-3 ${showSplit?'hidden':''}`} onClick={props.back}>INDIETRO</Button>
-           <Button variant="primary" size="small" className={`h-10 w-40 mb-1  ml-3 disabled:opacity-25 ${showSplit?'hidden':''} `} disabled={change< 0 ? true : false} onClick={() => (setShowSplit(true))}>FINALIZZA</Button>
+           <Button variant="primary" size="small" className={`h-10 w-40 mb-1  ml-3 disabled:opacity-25 ${showSplit?'hidden':''} `} disabled={change< 0 ? true : false} onClick={()=>props.handler()}>FINALIZZA</Button>
            <Button variant="primary" size="small" className={`h-10 w-46 mb-1  ml-3 ${!showSplit?'hidden':''}`} onClick={() => (props.close())}>CHIUDERE CASSETTO</Button>
         </div>
        
@@ -444,29 +471,32 @@ const CloseCart = (props) => {
   }
 
   const Bancomat = (props)=>{
-
-    console.log(process.env.PUBLIC_URL + '/pos.gif')
+    console.log('bancomat props' , props)
 
     return(
     <>
     <div className="flex flex-row h-full w-full border-2">
       <div className="flex flex-col h-fit w-fit border-2 justify-center">
        
-          {<CreditCard2BackFill className="w-full h-24 mb-2 text-gray-500 dark:text-gray-400" />}
+      
+        <i className={`fa-solid fa-credit-card fa-3x p-4 `}></i>
+        <h5 className="w-5/6 border-2 ml-4 text-xl text-center break-words	font-semibold  text-gray-900">{props.title}</h5> 
+    
+    
         
-        <h5 className="w-5/6 border-2 ml-4 text-xl text-center break-words	font-semibold  text-gray-900 dark:text-white">{props.title}</h5>
+        {/* <h5 className="w-5/6 border-2 ml-4 text-xl text-center break-words	font-semibold  text-gray-900 dark:text-white">hello</h5> */}
 
 
         <div className="flex flex-col mt-6 ">
           <div className="mt-2">
             <label className=" ml-4 block mb-2 text-sm font-medium text-gray-900 dark:text-white"> Totale Spesa</label>
-            <input type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-xl font-semibold text-right rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-5/6 ml-4 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="150,73" required/>
+            <input type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-xl font-semibold text-right rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-5/6 ml-4 p-3 " value={props.total.toFixed(2)} readOnly/>
           </div>
           <div className="mt-2">
             <label className=" ml-4 block mb-2 text-sm font-medium text-gray-900 dark:text-white"> Incasso</label>
-            <input type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-xl font-semibold text-right rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-5/6 ml-4 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="150,73" required/>
+            <input type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-xl font-semibold text-right rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-5/6 ml-4 p-3 " placeholder="0.00" required/>
           </div>
-          <Button variant="primary" size="small" className="h-10 w-5/6 mb-1  mt-6 ml-3" onClick={() => (true)}>FINALIZZA</Button>
+          <Button variant="primary" size="small" className="h-10 w-5/6 mb-1  mt-6 ml-3" onClick={()=>props.handler()}>FINALIZZA</Button>
         </div>
       </div>
       <div className="flex flex-col h-full w-full border-2 items-center">
@@ -491,28 +521,28 @@ const CloseCart = (props) => {
     <div className="flex flex-row h-full w-full border-2">
       <div className="flex flex-col h-fit w-fit border-2 justify-center">
        
-          {<GiftCardMoney className="w-full h-24 mb-2 text-gray-500 dark:text-gray-400" />}
+        <i className={`fa-solid fa-gifts fa-3x p-4 `}></i>
         
-        <h5 className="w-5/6 border-2 ml-4 text-xl text-center break-words	font-semibold  text-gray-900 dark:text-white">{props.title}</h5>
+        <h5 className="w-5/6 border-2 ml-4 text-xl text-center break-words	font-semibold  text-gray-900 ">{props.title}</h5>
 
 
         <div className="flex flex-col mt-6 ">
           <div className="mt-2">
-            <label className=" ml-4 block mb-2 text-sm font-medium text-gray-900 dark:text-white"> Totale Spesa</label>
-            <input type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-xl font-semibold text-right rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-5/6 ml-4 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="150,73" required/>
+            <label className=" ml-4 block mb-2 text-sm font-medium text-gray-900"> Totale Spesa</label>
+            <input type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-xl font-semibold text-right rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-5/6 ml-4 p-3" value={props.total.toFixed(2)} readOnly/>
           </div>
           <div className="mt-2">
             <label className=" ml-4 block mb-2 text-sm font-medium text-gray-900 dark:text-white"> Incasso</label>
-            <input type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-xl font-semibold text-right rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-5/6 ml-4 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="150,73" required/>
+            <input type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-xl font-semibold text-right rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-5/6 ml-4 p-3 " placeholder="0.00" required/>
           </div>
-          <Button variant="primary" size="small" className="h-10 w-5/6 mb-1  mt-6 ml-3" onClick={() => (true)}>FINALIZZA</Button>
+          <Button variant="primary" size="small" className="h-10 w-5/6 mb-1  mt-6 ml-3" onClick={()=>props.handler()}>FINALIZZA</Button>
         </div>
       </div>
       <div className="ml-4 w-full h-fit border-2 grid grid-cols-2 grid-flow-row gap-3">
         <div className="flex flex-col h-full w-full border-2 items-center">
           <div className="w-96 h-auto">
-            <label className=" ml-4 block mb-2 text-xl font-medium text-gray-900 dark:text-white"> Inserire il codice della carta</label>
-            <input type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-xl font-semibold text-right rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-4 my-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="_" required/>
+            <label className=" ml-4 block mb-2 text-xl font-medium text-gray-900 "> Inserire il codice della carta</label>
+            <input type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-xl font-semibold text-right rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-4 my-2  " placeholder="_" required/>
           
             <NumericKb />
           </div>
@@ -525,7 +555,7 @@ const CloseCart = (props) => {
         <div className="flex flex-col h-full w-full border-2 items-center">
           <div className="w-96 h-auto">
               <label className=" ml-4 block mb-2 text-xl font-medium text-gray-900 dark:text-white"> Dettagli</label>
-              <input type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-xl font-semibold text-right rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-4 my-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="_" required/>
+              <input type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-xl font-semibold text-right rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-4 my-2  " placeholder="_" required/>
             
           </div>
         </div>
@@ -545,30 +575,44 @@ const CloseCart = (props) => {
     <div className="flex flex-row h-full w-full border-2">
       <div className="flex flex-col h-fit w-fit border-2 justify-center">
        
-          {<MoneyCheckDollar className="w-full h-24 mb-2 text-gray-500 dark:text-gray-400" />}
+        <i className={`fa-solid fa-money-check-dollar fa-3x p-4 `}></i>
         
-        <h5 className="w-5/6 border-2 ml-4 text-xl text-center break-words	font-semibold  text-gray-900 dark:text-white">{props.title}</h5>
+        <h5 className="w-5/6 border-2 ml-4 text-xl text-center break-words	font-semibold  text-gray-900 ">{props.title}</h5>
 
 
         <div className="flex flex-col mt-6 ">
           <div className="mt-2">
-            <label className=" ml-4 block mb-2 text-sm font-medium text-gray-900 dark:text-white"> Totale Spesa</label>
-            <input type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-xl font-semibold text-right rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-5/6 ml-4 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="150,73" required/>
+            <label className=" ml-4 block mb-2 text-sm font-medium text-gray-900 "> Totale Spesa</label>
+            <input type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-xl font-semibold text-right rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-5/6 ml-4 p-3 " value={props.total.toFixed(2)} readOnly/>
           </div>
           <div className="mt-2">
             <label className=" ml-4 block mb-2 text-sm font-medium text-gray-900 dark:text-white"> Incasso</label>
-            <input type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-xl font-semibold text-right rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-5/6 ml-4 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="150,73" required/>
+            <input type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-xl font-semibold text-right rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-5/6 ml-4 p-3 " placeholder="0.00" required/>
           </div>
-          <Button variant="primary" size="small" className="h-10 w-5/6 mb-1  mt-6 ml-3" onClick={() => (true)}>FINALIZZA</Button>
+          <Button variant="primary" size="small" className="h-10 w-5/6 mb-1  mt-6 ml-3" onClick={()=>props.handler()}>FINALIZZA</Button>
         </div>
       </div>
       <div className="flex flex-col h-full w-full border-2 items-center">
-          <NumericKb />
+          <div>FORMA DI PAGAMENTO</div>
           <div className="flex flex-row h-full items-center justify-end pr-4">
             <Button variant="primary" size="small" className="h-10 w-40 mb-1  ml-3" onClick={props.back}>INDIETRO</Button>
             <Button variant="primary" size="small" className="h-10 w-40 mb-1  ml-3" onClick={() => (true)}>REGISTRA</Button>
           </div>
       </div>
+    </div>
+    </>
+
+    )
+  }
+
+  const WrapUp = (props)=>{
+
+    console.log( 'WrapUp')
+
+    return(
+    <>
+    <div className="flex flex-row h-full w-full border-2">
+      FINALIZZA
     </div>
     </>
 

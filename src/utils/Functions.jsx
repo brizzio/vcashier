@@ -178,3 +178,10 @@ export const addToLocalStorageObject = function (name, key, value) {
 	localStorage.setItem(name, JSON.stringify(existing));
 
 };
+
+export const sumByPropertie = async (array, prop)=>{
+    return array.reduce( function(a, b){
+        let v = b[prop]? b[prop] : 0
+        return a + v;
+    }, 0);
+};
