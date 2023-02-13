@@ -1,6 +1,9 @@
 import React from "react"
+
 import Login from "./pages/Login"
 import Cashier from "./pages/Cashier"
+import ProductsPicker from "./pages/ProductsPicker";
+
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import AuthProvider from "./context/AuthProvider";
 import InfoProvider from "./context/InfoProvider";
@@ -35,7 +38,7 @@ function App() {
   return (
    <div className="flex justify-center items-center w-screen h-screen bg-white">
 
-    <div className="w-[84rem] h-[38rem] bg-white box-border border-2 border-zinc-300 rounded-2xl shadow shadow-2xl">
+    <div className="w-[84rem] h-[38rem] bg-white box-border border-zinc-300 rounded-2xl shadow shadow-2xl">
     <Router>
       
         <AuthProvider>
@@ -45,6 +48,7 @@ function App() {
                 <Route index element={<Cashier/>} />
               </Route>
               <Route path="/login" element={<Login/>} />
+              <Route path="/products" element={<ProductsPicker/>} />
             </Routes> 
           </InfoProvider>
         </AuthProvider>

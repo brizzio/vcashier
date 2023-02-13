@@ -51,6 +51,10 @@ function DisplayProduct(props) {
 
     const btnTitles = ui.btn
 
+    const handleProductPickerOnClick = ()=>{
+        navigate('/products', {state:prices})
+    }
+
     
 
   const handleQuantityChange = (q) =>{
@@ -183,7 +187,7 @@ function DisplayProduct(props) {
                 
                 <Button variant="primary" size="small" className="col-span-3 h-full" onClick={() => console.log('btn ckick')}>{btnTitles.cancelCart[lid].toUpperCase()}</Button>
 
-                <Button variant="primary" size="small" className="h-full w-full" onClick={() => console.log('btn ckick')}>{btnTitles.productPicker[lid].toUpperCase()}</Button>
+                <Button variant="primary" size="small" className="h-full w-full" onClick={handleProductPickerOnClick}>{btnTitles.productPicker[lid].toUpperCase()}</Button>
                 
                 <Button variant="primary" size="small" className="h-full min-w-full" onClick={() => console.log('btn ckick')}>{btnTitles.lastCart[lid].toUpperCase()}</Button>
 

@@ -1,0 +1,27 @@
+Data.js
+
+    import React from "react";
+    import ReactDOM, { render } from "react-dom";
+    import App01 from "./app-01.png";
+    import App02 from "./app-02.png";
+
+    let items = [
+    {
+        title: "tic tac toe",
+        id: 1,
+        image: App01,
+    },
+    {
+        title: "bytes",
+        id: 2,
+        image: App02,
+    },
+    ];
+
+    export function getItems() {
+    return items;
+    }
+
+    export function getItem(id) {
+        return items.find((item) => item.id === id);
+    }
